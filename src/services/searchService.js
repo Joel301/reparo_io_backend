@@ -22,7 +22,7 @@ export default async function (search) {
                 profileImg: element.profileImg ?
                 element.profileImg
                 : "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
-                proffessions: element.professions.map((element) =>{
+                professions: element.professions.map((element) =>{
                     return element.name
                 })
             }) 
