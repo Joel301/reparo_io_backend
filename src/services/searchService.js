@@ -1,7 +1,8 @@
 // const {Professionals, Professions} = require("../db")
 // const {Op}=require("sequelize")
+const {data}=require("./dummyData")
 
-export default async function (search) {
+const searchService = function (search) {
     try {
         // const profsDB = await Professionals.findAll({
         //     where: {
@@ -11,6 +12,14 @@ export default async function (search) {
         //     },
         //     include: Professions
         // })
+
+        const profsDB = data.filter((element)=>{
+            if (element.name.includes(search.toLowerCase())) return element
+        })
+
+        if (profsDB.length < 1) {
+            return ["No professional found"]
+        }
         
         //Aplicando formato a la data
         const searchedProfsDB=[]
@@ -27,7 +36,7 @@ export default async function (search) {
                 })
             }) 
         })
-
+        console.log("searchService")
         return searchedProfsDB
 
     } catch (e) {
@@ -35,4 +44,8 @@ export default async function (search) {
     }
 
 
+}
+
+module.exports={
+    searchService
 }

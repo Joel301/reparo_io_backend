@@ -1,10 +1,10 @@
 const {Router} = require("express")
-const {searchController} = require("../controllers")
+const {searchController} = require("../controllers/searchController")
 
 
 const router = Router()
 
-router.get("/home", searchController)
+router.get("/", searchController)
 
 
 router.use((err, req, res, next) => {

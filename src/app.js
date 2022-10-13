@@ -25,10 +25,11 @@ server.use((req, res, next) => {
     next();
 });
 
+server.use("/home", routes);
 server.use("/", (req, res) => {
     res.send("itworked");
 });
-server.use("/home", routes);
+
 
 // Error catching endware.
 server.use((err, req, res, next) => {
