@@ -5,7 +5,6 @@ const searchController = async function (req,res,next) {
 
     try {
         const data = await searchService(search)
-        console.log(data)
         res.json(data)
     } catch (e) {
         e.message="error from search controller"

@@ -36,7 +36,7 @@ const searchService = function (search) {
                 })
             }) 
         })
-        console.log("searchService")
+
         return searchedProfsDB
 
     } catch (e) {
