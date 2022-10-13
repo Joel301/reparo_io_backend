@@ -13,6 +13,7 @@ const searchService = function (search) {
         //     include: Professions
         // })
 
+        //Logica hacer la busqueda en la DummyData. Comentar cuandono se necesite
         const profsDB = data.filter((element)=>{
             if (element.name.includes(search.toLowerCase())) return element
         })
