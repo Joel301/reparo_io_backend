@@ -1,11 +1,14 @@
-const {Router} = require("express")
-const {searchController} = require("../controllers/searchController")
+const { Router } = require("express");
+const { searchController } = require("../controllers/searchController");
 
+const professionsRoute = require("./professions");
+const profesionalRoute = require("./profesional");
 
-const router = Router()
+const router = Router();
 
-router.get("/", searchController)
-
+router.use("/professionals", profesionalRoute);
+router.use("/professions", professionsRoute);
+router.get("/", searchController);
 
 router.use((err, req, res, next) => {
     // eslint-disable-line no-unused-vars
@@ -16,4 +19,3 @@ router.use((err, req, res, next) => {
 });
 
 module.exports = router;
-//Aqui estoy
