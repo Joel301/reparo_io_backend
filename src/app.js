@@ -27,7 +27,7 @@ server.use((req, res, next) => {
 
 server.use("/home", routes);
 server.use("/", (req, res) => {
-    res.send("itworked");
+    res.send("itworked ON DEVELOP");
 });
 
 
