@@ -13,6 +13,7 @@ router.use((err, req, res, next) => {
     const message = err.message || err;
     console.error(err);
     res.status(status).send(message);
-  });
-  
-  module.exports = router;
+});
+
+module.exports = router;
+//Aqui estoy
