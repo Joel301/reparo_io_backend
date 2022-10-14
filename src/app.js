@@ -3,6 +3,8 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
 
+const routes = require("./routes")
+
 const server = express();
 server.name = "API_reparo_io";
 server.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
@@ -23,10 +25,11 @@ server.use((req, res, next) => {
     next();
 });
 
+server.use("/home", routes);
 server.use("/", (req, res) => {
     res.send("itworked");
 });
-// server.use("/", routes);
+
 
 // Error catching endware.
 server.use((err, req, res, next) => {
