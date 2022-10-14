@@ -1,5 +1,5 @@
-// const {Professionals, Professions} = require("../db")
-// const {Op}=require("sequelize")
+const { Professionals, Professions } = require("../db");
+const { Op } = require("sequelize");
 const { data } = require("./dummyData");
 
 const searchService = async function (search) {
