@@ -8,10 +8,10 @@ const searchService = async function (search) {
       where: {
         [Op.or]:[
         {  firstName: {
-            [Op.iLike]: `%${search.toLowerCase()}`,
+            [Op.iLike]: `%${search.toLowerCase()}%`,
           }},
           {lastName: {
-            [Op.iLike]: `%${search.toLowerCase()}`
+            [Op.iLike]: `%${search.toLowerCase()}%`
           }}
         ]
        
@@ -33,7 +33,8 @@ const searchService = async function (search) {
     profsDB.forEach((element) => {
       searchedProfsDB.push({
         id: element.id,
-        name: element.name,
+        firstName: element.firstName,
+        lastName: element.lastName,
         reputation: element.reputation,
         profileImg: element.profileImg
           ? element.profileImg
