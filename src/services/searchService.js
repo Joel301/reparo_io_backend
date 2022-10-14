@@ -4,19 +4,19 @@ const {data}=require("./dummyData")
 
 const searchService = function (search) {
     try {
-        // const profsDB = await Professionals.findAll({
-        //     where: {
-        //         name: {
-        //             [Op.iLike]: `%${search}`
-        //         }
-        //     },
-        //     include: Professions
-        // })
+         const profsDB = await Professionals.findAll({
+             where: {
+                name: {
+                   [Op.iLike]: `%${search}`
+               }
+             },
+             include: Professions
+         })
 
         //Logica hacer la busqueda en la DummyData. Comentar cuandono se necesite
-        const profsDB = data.filter((element)=>{
-            if (element.name.includes(search.toLowerCase())) return element
-        })
+        //const profsDB = data.filter((element)=>{
+         //   if (element.name.includes(search.toLowerCase())) return element
+        //})
 
         if (profsDB.length < 1) {
             return ["No professional found"]
