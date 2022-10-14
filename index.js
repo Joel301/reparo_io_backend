@@ -24,9 +24,13 @@ const port = process.env.PORT || 3001;
 
 const { conn } = require("./src/db.js");
 
+//cambiar mode para modificar modelos
+// mode = { force: true }
+mode = {};
+
 // Syncing all the models at once.
-conn.sync({ alter: true }).then(() => {
-  server.listen(port, () => {
-    console.log("%s listening at 3001"); // eslint-disable-line no-console
-  });
+conn.sync(mode).then(() => {
+    server.listen(port, () => {
+        console.log("%s listening at 3001"); // eslint-disable-line no-console
+    });
 });
