@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const { searchController } = require("../controllers/searchController");
 
+
 const professionsRoute = require("./professions");
 const profesionalRoute = require("./profesional");
 
