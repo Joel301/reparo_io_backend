@@ -7,7 +7,7 @@ const searchService = async function (search) {
     const profsDB = await Professionals.findAll({
       where: {
         name: {
-          [Op.iLike]: `%${search}`,
+          [Op.iLike]: `%${search.toLowerCase()}`,
         },
       },
       include: Professions,
