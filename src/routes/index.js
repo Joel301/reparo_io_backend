@@ -1,11 +1,12 @@
 const {Router} = require("express")
 const {searchController} = require("../controllers/searchController")
 
+const professionsRoute  = require('./professions');
 
 const router = Router()
 
 router.get("/", searchController)
-
+router.use('/professions' , professionsRoute);
 
 router.use((err, req, res, next) => {
     // eslint-disable-line no-unused-vars
