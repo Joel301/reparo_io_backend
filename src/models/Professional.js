@@ -24,7 +24,7 @@ module.exports = (sequelize) => {
             address: {
                 type: DataTypes.TEXT,
                 allowNull: false,
-            }
+            },
             profileImg: {
                 type: DataTypes.STRING,
                 defaultValue:
