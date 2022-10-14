@@ -1,16 +1,16 @@
-const { Professionals, Professions } = require("../db");
+const { Professional, Profession } = require("../db");
 const { Op } = require("sequelize");
 const { data } = require("./dummyData");
 
 const searchService = async function (search) {
   try {
-    const profsDB = await Professionals.findAll({
+    const profsDB = await Professional.findAll({
       where: {
         name: {
           [Op.iLike]: `%${search.toLowerCase()}`,
         },
       },
-      include: Professions,
+      include: Profession,
     });
 
     //Logica hacer la busqueda en la DummyData. Comentar cuandono se necesite
