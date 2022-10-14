@@ -9,10 +9,22 @@ module.exports = (sequelize) => {
                 defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
             },
-            name: {
+            firstName: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+            lastName: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            phoneNumber: {
+                type:DataTypes.INTEGER,
+                allowNull: false,
+            },
+            address: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            }
             profileImg: {
                 type: DataTypes.STRING,
                 defaultValue:
@@ -22,7 +34,7 @@ module.exports = (sequelize) => {
                 type: DataTypes.FLOAT,
                 validate: {
                     min: 0,
-                    max: 100,
+                    max: 5,
                 },
             },
         },
