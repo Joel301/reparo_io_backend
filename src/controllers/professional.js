@@ -6,24 +6,31 @@ const getAllProfesional = async () => {
 };
 
 const infoById = async (id) => {
-  const profesionalId = await Professional.findOne({
-    where: { id: id },
-    include: [{ model: Profession, attributes: ["id", "name"] }],
-  });
+  try {
+    const profesionalId = await Professional.findOne({
+      where: { id: id },
+      include: [{ model: Profession, attributes: ["id", "name"] }],
+    });
 
-  let profes = profesionalId.professions ? professions.map((p) => p.name) : [];
+    if (!profesionalId) throw new Error("not Found");
 
-  const prof = {
-    id: profesionalId.id,
-    firstName: profesionalId.firstName,
-    lastName: profesionalId.lastName,
-    profileImg: profesionalId.profileImg,
-    reputation: profesionalId.reputation
-      ? profesionalId.reputation
-      : "not available yet",
-    professions: profes,
-  };
-  return prof;
+    let profes = profesionalId.professions ? profesionalId.professions : [];
+
+    const prof = {
+      id: profesionalId.id,
+      firstName: profesionalId.firstName,
+      lastName: profesionalId.lastName,
+      profileImg: profesionalId.profileImg,
+      reputation: profesionalId.reputation
+        ? profesionalId.reputation
+        : "not available yet",
+      professions: profes,
+    };
+    return prof;
+  } catch (e) {
+    e.status = 404;
+    throw e;
+  }
 };
 
 function isStringOk(data) {
