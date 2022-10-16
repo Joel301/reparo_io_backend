@@ -19,7 +19,7 @@ const infoById = async (id) => {
     firstName: profesionalId.firstName,
     lastName: profesionalId.lastName,
     profileImg: profesionalId.profileImg,
-    reputation: profesionalId.reputation? profesionaId.reputation:"not available yet",
+    reputation: profesionalId.reputation? profesionalId.reputation:"not available yet",
     professions: profes,
   };
   return prof;
