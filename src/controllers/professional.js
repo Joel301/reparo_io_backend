@@ -5,6 +5,26 @@ const getAllProfesional = async () => {
     return results;
 };
 
+const infoById = async (id) => {
+    const profesionalId = await Professional.findOne({
+        where : { id: id },
+        include: [{model: Profession,
+        attributes: ["id","name"]}],
+    })
+    let {Professions} = profesionalId;
+    let profes = Professions ?
+    Professions.map((p) => p.name) : [];
+
+    const prof = {
+        id: profesionalId.id,
+        name: profesionalId.name,
+        profileImg: profesionalId.profileImg,
+        reputation: profesionalId.reputation,
+        professions: profes,
+    }
+    return prof
+}
+
 const postAProfesional = async (profesionalData) => {
     if (!profesionalData.firstName) {
         return { error: "Profesional must have at least a name" };
@@ -34,4 +54,5 @@ const postAProfesional = async (profesionalData) => {
 module.exports = {
     getAllProfesional,
     postAProfesional,
+    infoById,
 };
