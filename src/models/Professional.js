@@ -34,13 +34,6 @@ module.exports = (sequelize) => {
                 defaultValue:
                     "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
             },
-            reputation: {
-                type: DataTypes.FLOAT,
-                validate: {
-                    min: 0,
-                    max: 5,
-                },
-            },
         },
         { timestamps: false }
     );
