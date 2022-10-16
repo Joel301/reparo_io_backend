@@ -1,10 +1,29 @@
 const { Professional, Profession } = require("../db.js");
 
 const getAllProfesional = async () => {
-    const results = await Professional.findAll({
-        include: Profession
-    });
-    return results;
+
+  const results = await Professional.findAll();
+  return results;
+};
+
+const infoById = async (id) => {
+  const profesionalId = await Professional.findOne({
+    where: { id: id },
+    include: [{ model: Profession, attributes: ["id", "name"] }],
+  });
+  let { professions } = profesionalId;
+  let profes = professions ? professions.map((p) => p.name) : [];
+
+  const prof = {
+    id: profesionalId.id,
+    firstName: profesionalId.firstName,
+    lastName: profesionalId.lastName,
+    profileImg: profesionalId.profileImg,
+    reputation: profesionalId.reputation,
+    professions: profes,
+  };
+  return prof;
+
 };
 
 function isStringOk(data) {
@@ -22,33 +41,37 @@ function isStringOk(data) {
 
 
 const postAProfesional = async (profesionalData) => {
-    const {firstName, lastName, professions, phoneNumber, address, aboutMe, profileImg} = profesionalData
-    if (!profesionalData.firstName) {
-        return { error: "Profesional must have at least a name" };
-    }
-    try {
-        const newProfessional = await Professional.create(profesionalData);
 
-        await Promise.all(
-            profesionalData.professions.map(async (p) => {
-                let profesion = {};
-                // esto es para tomar ambos sean objetos o id de profesion
-                isNaN(p)
-                    ? (profesion = await Profession.findOne({
-                          where: { name: `${p}`},
-                      }))
-                    : (profesion = await Profession.findByPk(p));
-   
-                newProfessional.addProfession(profesion);
+  if (!profesionalData.firstName) {
+    return { error: "Profesional must have at least a name" };
+  }
+  try {
+    const newProfessional = await Professional.create(profesionalData);
+
+    await Promise.all(
+      profesionalData.professions.map(async (p) => {
+        let profesion = {};
+        // esto es para tomar ambos sean objetos o id de profesion
+        isNaN(p)
+          ? (profesion = await Profession.findOne({
+              where: { name: `${p}` },
+
+
             }))
+          : (profesion = await Profession.findByPk(p));
 
-        return newProfessional.dataValues;
-    } catch (e) {
-        return { error: e };
-    }
+        newProfessional.addProfession(profesion);
+      })
+    );
+
+    return newProfessional.dataValues;
+  } catch (e) {
+    return { error: e };
+  }
 };
 
 module.exports = {
-    getAllProfesional,
-    postAProfesional,
+  getAllProfesional,
+  postAProfesional,
+  infoById,
 };
