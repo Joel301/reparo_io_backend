@@ -7,7 +7,22 @@ const getAllProfesional = async () => {
     return results;
 };
 
+function isStringOk(data) {
+    if (typeof data !== "string")
+      throw new Error(`INPUT_ERROR: ${data} is not a String`);
+    if (data.trim() === "")
+      throw new Error(`INPUT_ERROR: ${data} cannot be empty`);
+  }
+  
+  function isArrayOk(data) {
+    if (typeof data !== "object")
+      throw new Error(`INPUT_ERROR: ${data} is not an Array`);
+    //Se aceptan instrucciones vacias
+  }
+
+
 const postAProfesional = async (profesionalData) => {
+    const {firstName, lastName, professions, phoneNumber, address, aboutMe, profileImg} = profesionalData
     if (!profesionalData.firstName) {
         return { error: "Profesional must have at least a name" };
     }
