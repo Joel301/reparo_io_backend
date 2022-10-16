@@ -29,6 +29,17 @@ module.exports = (sequelize) => {
                 type: DataTypes.TEXT,
                 defaultValue: "There's no description available"
             },
+            email: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    isEmail: true
+                }
+            },
+            password: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
             profileImg: {
                 type: DataTypes.STRING,
                 defaultValue:
