@@ -1,3 +1,5 @@
+const {Profession}=require("../db")
+
 const preloadProfs =()=>{
    
     let aireAcondicionado = Profession.findOrCreate({
@@ -55,6 +57,6 @@ const preloadProfs =()=>{
       })
 }
 
-module.export={
-    preloadProfs
+module.exports={
+  preloadProfs
 }

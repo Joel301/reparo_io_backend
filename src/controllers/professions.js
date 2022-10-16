@@ -1,8 +1,8 @@
-const preLoadProfs =require("../utils/preLoadProfs")
+const {preloadProfs} =require("../utils/preLoadProfs")
 const { Professional, Profession } = require('../db.js');
 
 const infoProfessions = async ()=>{
-  // preloadProfs();
+  preloadProfs();
   const profs = await Profession.findAll({
     include: [{
         model: Professional,       
