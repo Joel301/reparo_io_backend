@@ -8,6 +8,7 @@ const getAllProfesional = async () => {
 };
 
 
+
 //Validaciones -- Se podrian mover a un archivo aparte
 function isStringOk(data) {
     data.forEach(element => {
@@ -24,6 +25,7 @@ function isStringOk(data) {
   function isArrayOk(data) {
     if (typeof data !== "object")
       throw new Error(`INPUT_ERROR: ${data} is not an Array`);
+
   }
 
   function isEmail(data) {
@@ -37,6 +39,7 @@ function isStringOk(data) {
 
 const postAProfesional = async (profesionalData) => {
     const {firstName, lastName, address, professions, email} = profesionalData
+
 
     try {
         isStringOk([firstName, lastName, address])
