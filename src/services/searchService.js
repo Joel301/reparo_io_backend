@@ -6,15 +6,18 @@ const searchService = async function (search) {
   try {
     const profsDB = await Professional.findAll({
       where: {
-        [Op.or]:[
-        {  firstName: {
-            [Op.iLike]: `%${search.toLowerCase()}%`,
-          }},
-          {lastName: {
-            [Op.iLike]: `%${search.toLowerCase()}%`
-          }}
-        ]
-       
+        [Op.or]: [
+          {
+            firstName: {
+              [Op.iLike]: `%${search.toLowerCase()}%`,
+            },
+          },
+          {
+            lastName: {
+              [Op.iLike]: `%${search.toLowerCase()}%`,
+            },
+          },
+        ],
       },
       include: Profession,
     });
@@ -35,7 +38,9 @@ const searchService = async function (search) {
         id: element.id,
         firstName: element.firstName,
         lastName: element.lastName,
-        reputation: element.reputation,
+        reputation: element.reputation
+          ? element.reputation
+          : "not available yet",
         profileImg: element.profileImg
           ? element.profileImg
           : "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
