@@ -1,12 +1,27 @@
 const { Professional, Profession } = require("../db.js");
+const { Op } = require("sequelize");
+
+const isUUID =
+  /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
 
 const getAllProfesional = async () => {
   const results = await Professional.findAll({ include: Profession });
-  return results;
+  return results.map((p) => {         //esto es para solo retornar la profesion en array y excluir el Prof_Prof
+    if (p.professions.length) {
+      console.log(p)
+      return {
+        ...p.dataValues, professions: p.dataValues.professions.map(profemap => {
+          const { id, name } = profemap.dataValues
+          return { id, name }
+        })
+      }
+    } else { return p }
+  })
 };
 
 const infoById = async (id) => {
   try {
+    if (!isUUID.test(id)) throw new Error("Invalid UUID Format"); //revisa que sea un uuid para evitar sequelize error
     const profesionalId = await Professional.findOne({
       where: { id: id },
       include: [{ model: Profession, attributes: ["id", "name"] }],
@@ -59,8 +74,8 @@ const postAProfesional = async (profesionalData) => {
         // esto es para tomar ambos sean objetos o id de profesion
         isNaN(p)
           ? (profesion = await Profession.findOne({
-              where: { name: `${p}` },
-            }))
+            where: { name: `${p}` },
+          }))
           : (profesion = await Profession.findByPk(p));
 
         newProfessional.addProfession(profesion);
@@ -73,8 +88,66 @@ const postAProfesional = async (profesionalData) => {
   }
 };
 
+const putProfesional = async (profesionalData, id) =>{
+  try {
+    let updateProfesional= await Professional.findOne({
+        where:{
+            id: id,
+        },
+        include:{
+            model: Profession,
+            attributes: ['name'],
+            through: {
+                attributes:[]
+            }}
+    });
+    await updateProfesional.update({
+        firstName: profesionalData.firstName,
+        lastName: profesionalData.lastName,
+        phoneNumber: profesionalData.phoneNumber,
+        address: profesionalData.address,
+        aboutMe: profesionalData.aboutMe,
+        profileImg: profesionalData.profileImg
+    });
+    let profDb= await Profession.findAll({
+        where:{
+            name:{
+                [Op.in]: profesionalData.professions,
+            },
+        },
+    });
+    await updateProfesional.setProfessions(profDb);
+    return updateProfesional;
+} catch (error) {
+    console.log(error);
+}    
+}
+const delProfesional = async (id) => {
+  try {
+    const profDelete= await Professional.findByPk(id,{
+        include:{
+            model: Profession,
+            attributes: ['name'],
+            through: {
+                attributes:[]
+            }}
+    })
+    if(profDelete){
+        await profDelete.destroy();
+        return res.send('..Professional deleted!');
+    }
+    else
+        return res.send({message: 'not found'});
+   } catch (error) {
+       console.log(error);
+   }
+  
+}
+
 module.exports = {
   getAllProfesional,
   postAProfesional,
+  putProfesional,
+  delProfesional,
   infoById,
 };
