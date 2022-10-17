@@ -9,7 +9,6 @@ const {
 const router = Router();
 
 router.get("/", (req, res, next) => {
-    console.log("imhere");
     getAllProfesional().then((r) => res.send(r));
 });
 
