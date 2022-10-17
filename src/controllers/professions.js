@@ -1,7 +1,9 @@
-const { preloadProfs } = require("../utils/preLoadProfs");
-const { Professional, Profession } = require("../db.js");
 
-const infoProfessions = async () => {
+const {preloadProfs} =require("../utils/preLoadProfs")
+const { Professional, Profession } = require('../db.js');
+
+const infoProfessions = async ()=>{
+
   preloadProfs();
   const profs = await Profession.findAll({
     include: [

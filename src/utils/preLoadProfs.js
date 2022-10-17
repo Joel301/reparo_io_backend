@@ -1,3 +1,4 @@
+
 const { Profession } = require("../db");
 
 const preloadProfs = () => {
@@ -59,3 +60,4 @@ const preloadProfs = () => {
 module.exports = {
   preloadProfs,
 };
+

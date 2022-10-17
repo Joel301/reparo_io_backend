@@ -12,6 +12,8 @@ router.get("/", (req, res, next) => {
     getAllProfesional().then((r) => res.send(r));
 });
 
+
+
 router.get("/:id", async (req, res, next) => {
     const { id } = req.params
     try {
@@ -23,10 +25,16 @@ router.get("/:id", async (req, res, next) => {
 })
 
 router.post("/", (req, res, next) => {
+
     const { body } = req;
     console.log(body, "aqui");
-    postAProfesional(body).then((r) => console.log(r));
-    res.send(body);
+    try{
+        await postAProfesional(body)
+        res.send({message:"agregado"})
+    } catch(e){
+        next(e)
+    }
+    
 });
 
 router.put('/:id', async (req, res, next)=>{
