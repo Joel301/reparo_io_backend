@@ -1,4 +1,5 @@
 const { Professional, Profession } = require("../db.js");
+const { Op }= require('sequelize');
 
 const getAllProfesional = async () => {
   const results = await Professional.findAll();
@@ -73,8 +74,66 @@ const postAProfesional = async (profesionalData) => {
   }
 };
 
+const putProfesional = async (profesionalData, id) =>{
+  try {
+    let updateProfesional= await Professional.findOne({
+        where:{
+            id: id,
+        },
+        include:{
+            model: Profession,
+            attributes: ['name'],
+            through: {
+                attributes:[]
+            }}
+    });
+    await updateProfesional.update({
+        firstName: profesionalData.firstName,
+        lastName: profesionalData.lastName,
+        phoneNumber: profesionalData.phoneNumber,
+        address: profesionalData.address,
+        aboutMe: profesionalData.aboutMe,
+        profileImg: profesionalData.profileImg
+    });
+    let profDb= await Profession.findAll({
+        where:{
+            name:{
+                [Op.in]: profesionalData.professions,
+            },
+        },
+    });
+    await updateProfesional.setProfessions(profDb);
+    return updateProfesional;
+} catch (error) {
+    console.log(error);
+}    
+}
+const delProfesional = async (id) => {
+  try {
+    const profDelete= await Professional.findByPk(id,{
+        include:{
+            model: Profession,
+            attributes: ['name'],
+            through: {
+                attributes:[]
+            }}
+    })
+    if(profDelete){
+        await profDelete.destroy();
+        return res.send('..Professional deleted!');
+    }
+    else
+        return res.send({message: 'not found'});
+   } catch (error) {
+       console.log(error);
+   }
+  
+}
+
 module.exports = {
   getAllProfesional,
   postAProfesional,
+  putProfesional,
+  delProfesional,
   infoById,
 };
