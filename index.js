@@ -27,15 +27,11 @@ const { conn } = require("./src/db.js");
 //cambiar mode para modificar modelos
 // mode = { force: true }
 
-
-
-
-mode = {alter:true};
-
+mode = { force: true };
 
 // Syncing all the models at once.
 conn.sync(mode).then(() => {
-    server.listen(port, () => {
-        console.log("%s listening at 3001"); // eslint-disable-line no-console
-    });
+  server.listen(port, () => {
+    console.log("%s listening at 3001"); // eslint-disable-line no-console
+  });
 });
