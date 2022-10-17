@@ -1,7 +1,7 @@
 const { Professional, Profession } = require("../db.js");
 
 const getAllProfesional = async () => {
-  const results = await Professional.findAll();
+  const results = await Professional.findAll({ include: Profession });
   return results;
 };
 
