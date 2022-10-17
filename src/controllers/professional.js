@@ -17,8 +17,6 @@ const getAllProfesional = async () => {
       }
     } else { return p }
   })
-
-  //return results;
 };
 
 const infoById = async (id) => {
