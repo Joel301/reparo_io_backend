@@ -9,7 +9,9 @@ const {
 const router = Router();
 
 router.get("/", (req, res, next) => {
-  getAllProfesional().then((r) => res.send(r));
+  getAllProfesional().then((r) => res.send(
+    r.map(p => { return { "review": Math.floor(Math.random() * (5 - 0) + 1), ...p } })
+  ));
 });
 
 router.get("/:id", async (req, res, next) => {
