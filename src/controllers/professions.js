@@ -9,7 +9,7 @@ const infoProfessions = async ()=>{
     include: [
       {
         model: Professional,
-        attributes: ["id"],
+        //attributes: ["id"],
       },
     ],
   });
