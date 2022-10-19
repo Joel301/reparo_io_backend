@@ -8,14 +8,13 @@ const getAllProfesional = async () => {
   const results = await Professional.findAll({ include: Profession });
   return results.map((p) => {         //esto es para solo retornar la profesion en array y excluir el Prof_Prof
     if (p.professions.length) {
-      console.log(p)
       return {
         ...p.dataValues, professions: p.dataValues.professions.map(profemap => {
           const { id, name } = profemap.dataValues
           return { id, name }
         })
       }
-    } else { return p }
+    } else { return p.dataValues }
   })
 };
 
