@@ -15,16 +15,18 @@ function getADummy() {
         password: faker.lorem.word(),
         professions: [
             Math.floor(Math.random() * (20 - 0) + 1),
+            Math.floor(Math.random() * (20 - 0) + 1),
+            Math.floor(Math.random() * (20 - 0) + 1),
             Math.floor(Math.random() * (20 - 0) + 1)
         ]
     }
 }
 
-function loadDummys(minUser = 10) {
+function loadDummys(minUser = 15) {
     getAllProfesional()
         .then(r => {
             var dummys = []
-            for (var i = 0; i < minUser; i++) {
+            for (var i = 0; i < minUser - r.length; i++) {
                 dummys.push(postAProfesional(getADummy()))
             }
             return dummys
