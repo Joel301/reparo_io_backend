@@ -6,7 +6,6 @@ const isUUID =
 
 const getAllProfesional = async () => {
   const results = await Professional.findAll({ include: Profession });
-
   return await Promise.all(
 
     results.map((p) => {         //esto es para solo retornar la profesion en array y excluir el Prof_Prof
@@ -40,6 +39,9 @@ const infoById = async (id) => {
       firstName: profesionalId.firstName,
       lastName: profesionalId.lastName,
       profileImg: profesionalId.profileImg,
+      phoneNumber: profesionalId.phoneNumber,
+      address: profesionalId.address,
+      email: profesionalId.email,
       reputation: profesionalId.reputation
         ? profesionalId.reputation
         : "not available yet",
