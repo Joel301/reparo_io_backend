@@ -35,6 +35,9 @@ const infoById = async (id) => {
       firstName: profesionalId.firstName,
       lastName: profesionalId.lastName,
       profileImg: profesionalId.profileImg,
+      phoneNumber: profesionalId.phoneNumber,
+      address: profesionalId.address,
+      email: profesionalId.email,
       reputation: profesionalId.reputation
         ? profesionalId.reputation
         : "not available yet",
