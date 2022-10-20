@@ -1,3 +1,5 @@
+#esto no deberia estar en el git
+package-lock.json
 #.enviroments variable
 .env
 .env.*
