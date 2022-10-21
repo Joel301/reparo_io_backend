@@ -11,7 +11,7 @@ const router = Router();
 
 router.use("/professionals", profesionalRoute);
 router.use("/professions", professionsRoute);
-router.use("/client", clientRoute)
+router.use("/clients", clientRoute)
 router.get("/", searchController);
 
 router.use((err, req, res, next) => {

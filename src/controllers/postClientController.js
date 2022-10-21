@@ -1,4 +1,4 @@
-
+const {Client} = require("../db")
 
 //Validaciones -- Se podrian mover a un archivo aparte
 function isStringOk(data) {
@@ -40,9 +40,10 @@ function isStringOk(data) {
       const newClient = await Client.create(req.body);
         
 
-      return await newClient;
+      res.json(newClient);
   
     } catch (e) {
+        
         e.message="error at creating client"
       next(e)
     }
