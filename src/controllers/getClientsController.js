@@ -5,7 +5,7 @@ const getClientsController = async function (req,res,next) {
     try {
 
         const results = await Client.findAll()
-
+        
         if (!results) res.json("no client found")
         else res.json(results)
         
