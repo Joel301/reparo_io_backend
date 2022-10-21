@@ -8,7 +8,7 @@ const getClientController= async function (req,res,next) {
         )
 
         if (!client) res.json("Not found")
-        else res.json()
+        else res.json(client)
 
     } catch (error) {
         
