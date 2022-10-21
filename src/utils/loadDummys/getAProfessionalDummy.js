@@ -7,9 +7,7 @@ function getAProfessionalDummy() {
     const data = {}
     var randomName = faker.name.findName(); // Generates a random name
     var [firstName, lastName] = randomName.split(" ")
-
-
-    return {
+    var randomProfessional = {
         firstName,
         lastName,
         phoneNumber: faker.phone.phoneNumber(),
@@ -23,12 +21,17 @@ function getAProfessionalDummy() {
                 - 0) + 1)
         ],
         professions: [
-            Math.floor(Math.random() * (20 - 0) + 1),  // Seleccciona selecciona una profesion al azar
-            Math.floor(Math.random() * (20 - 0) + 1),
-            Math.floor(Math.random() * (20 - 0) + 1),
-            Math.floor(Math.random() * (20 - 0) + 1)
+            `${Math.floor(Math.random() * (12 - 0) + 1)}`,  // Seleccciona selecciona una profesion al azar
         ]
     }
+    for (let i = 0; i < 3; i++) {
+        let randNum = `${Math.floor(Math.random() * (12 - 0) + 1)}`
+        randomProfessional['professions'] = [
+            ...randomProfessional['professions'].filter((e) => e != randNum),
+            randNum
+        ]
+    }
+    return randomProfessional
 }
 
 module.exports = getAProfessionalDummy

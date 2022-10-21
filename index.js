@@ -32,6 +32,6 @@ mode = { alter: true };
 // Syncing all the models at once.
 conn.sync(mode).then(() => {
   server.listen(port, () => {
-    console.log("%s listening at 3001"); // eslint-disable-line no-console
+    console.log("%s listening at 3001");            // eslint-disable-line no-console
   });
 });
