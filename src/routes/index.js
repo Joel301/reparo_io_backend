@@ -4,11 +4,14 @@ const { searchController } = require("../controllers/searchController");
 
 const professionsRoute = require("./professions");
 const profesionalRoute = require("./profesional");
+const clientRoute=require("./client")
+const { route } = require("./professions");
 
 const router = Router();
 
 router.use("/professionals", profesionalRoute);
 router.use("/professions", professionsRoute);
+router.use("/client", clientRoute)
 router.get("/", searchController);
 
 router.use((err, req, res, next) => {
