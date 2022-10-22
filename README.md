@@ -34,7 +34,7 @@
 
 -   ### Buscar _professional_ por _id_
 
-```http
+```
   GET https://reparoiobackend-main.up.railway.app/home/professionals/${id}
 ```
 
@@ -60,17 +60,17 @@
 
 -   ### Buscar _professional_ por nombre o apellido
 
-```http
+```
     GET https://reparoiobackend-main.up.railway.app/home?search={search}
 ```
 
 
 -   ### Agregar un professional
-````http
+```
     POST  https://reparoiobackend-main.up.railway.app/home/professionals
-````
+```
 Requiere:
-````
+```
 {
     id: STRING,
     firstName: STRING,
@@ -82,7 +82,7 @@ Requiere:
     password: STRING,
     professions: []
 }
-````
+```
 
 
 ---
