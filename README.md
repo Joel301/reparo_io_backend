@@ -3,7 +3,7 @@
 ## Rutas API
 
 ## Professions
-### Mostrar todo _professional_
+-   ### Mostrar todo _professional_
 
 ```
   GET https://reparoiobackend-main.up.railway.app/home/professionals
