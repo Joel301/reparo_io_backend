@@ -87,28 +87,8 @@ Requiere:
 
 ---
 ##  Clients
-{
-    "firstName": "hiram",
-    "lastName": "rivero",
-    "password": "123",
-    "email": "juanito@reparo.io",
-    "phoneNumber": 111111111,
-    "profileImg": "url",
-    "aboutMe": "soy un pokemon",
-    "address": "hola estoy aqui",
-    "professions": ["electricista", "plomero"]
-
-}‌
+-   ### Agregar un client
+```
+  POST _todavia no se pasa a produccion_
 ```
 
--   RESPUESTA:
-
-{message: “agregado”}
-
--   Si Error:
-
-STRING(mensaje del error)
-
-
-#CLIENTS
-Aplica
