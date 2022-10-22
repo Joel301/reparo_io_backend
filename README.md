@@ -5,7 +5,7 @@
 ## Professions
 ### Mostrar todo _professional_
 
-```http
+```
   GET https://reparoiobackend-main.up.railway.app/home/professionals
 ```
 ```
