@@ -43,5 +43,9 @@ module.exports = (sequelize) => {
       defaultValue:
         "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
     },
+    enabled: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   });
 };
