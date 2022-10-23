@@ -2,14 +2,18 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    "professional_dates",
+    "reservation",
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
       },
-      days: {
-        type: DataTypes.STRING,
+      startDay: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      endDay: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
     },
