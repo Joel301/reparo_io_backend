@@ -29,7 +29,7 @@ const postOrderController = async function (req, res, next) {
 
         //creando el registro
         const item = await OrderDetail.create({
-          price,
+          reservationAmount,
           startDay: element.startDay,
           endDay: element.endDay,
           professionalId: element.professionalId,
@@ -57,6 +57,9 @@ const postOrderController = async function (req, res, next) {
           clientId,
         });
         await newOrder.addOrderDetails(data.items);
+        data.items.forEach(async (element) => {
+          await element.setOrder(newOrder);
+        });
         res.json({ message: "order created" });
       });
   } catch (error) {
