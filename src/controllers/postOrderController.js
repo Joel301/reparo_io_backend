@@ -29,7 +29,7 @@ const postOrderController = async function (req, res, next) {
 
         //creando el registro
         const item = await OrderDetail.create({
-          reservationAmount,
+          reservationAmount: element.reservationAmount,
           startDay: element.startDay,
           endDay: element.endDay,
           professionalId: element.professionalId,
