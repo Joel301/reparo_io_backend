@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       primaryKey: true,
     },
-    reservationAmount: {
+    price: {
       type: DataTypes.FLOAT,
       defaultValue: 0.0,
     },
