@@ -5,6 +5,7 @@ const { searchController } = require("../controllers/searchController");
 const professionsRoute = require("./professions");
 const profesionalRoute = require("./profesional");
 const clientRoute=require("./client")
+const testAuth=require("./testAuth")
 const { route } = require("./professions");
 
 const router = Router();
@@ -12,6 +13,7 @@ const router = Router();
 router.use("/professionals", profesionalRoute);
 router.use("/professions", professionsRoute);
 router.use("/clients", clientRoute)
+router.use("/test", testAuth)
 router.get("/", searchController);
 
 router.use((err, req, res, next) => {
