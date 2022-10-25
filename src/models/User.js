@@ -47,8 +47,8 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
-    isProfessional: { type: DataTypes.STRING, defaultValue: null },
-    isClient: { type: DataTypes.STRING, defaultValue: null },
-    isAdmin: { type: DataTypes.STRING, defaultValue: null },
+    // isProfessional: { type: DataTypes.STRING, defaultValue: null },
+    // isClient: { type: DataTypes.STRING, defaultValue: null },
+    // isAdmin: { type: DataTypes.STRING, defaultValue: null },
   });
 };

@@ -46,7 +46,8 @@ const {
   OrderDetail,
   Order,
   Reservation,
-  User
+  User,
+  Admin
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -54,10 +55,12 @@ const {
 Professional.belongsToMany(Profession, { through: Prof_Prof });
 Profession.belongsToMany(Professional, { through: Prof_Prof });
 
-User.hasOne(Professional)
-Professional.belongsTo(User)
-User.hasOne(Client)
-Client.belongsTo(User)
+User.belongsTo(Professional)
+Professional.hasOne(User)
+User.belongsTo(Client)
+Client.hasOne(User)
+User.belongsTo(Admin)
+Admin.hasOne(User)
 
 Client.hasMany(Order);
 Order.belongsTo(Client);

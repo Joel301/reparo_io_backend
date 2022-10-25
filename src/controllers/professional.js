@@ -106,7 +106,7 @@ const postAProfesional = async (profesionalData) => {
                 newProfessional.addProfession(profesion);
             }))
 
-        return newProfessional.dataValues;
+        return newProfessional;
         
     } catch (e) {
         throw e
