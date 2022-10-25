@@ -45,7 +45,6 @@ const {
   Client,
   OrderDetail,
   Order,
-  ProAgenda,
   Reservation,
 } = sequelize.models;
 
@@ -63,11 +62,8 @@ OrderDetail.belongsTo(Order);
 Professional.hasMany(OrderDetail);
 OrderDetail.belongsTo(Professional);
 
-Professional.hasOne(ProAgenda);
-ProAgenda.belongsTo(Professional);
-
-ProAgenda.hasMany(Reservation);
-Reservation.belongsTo(ProAgenda);
+Professional.hasMany(Reservation);
+Reservation.belongsTo(Professional);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
