@@ -1,4 +1,5 @@
-const { Order, OrderDetail, Professional } = require("../db");
+const { Order, OrderDetail, Professional, Reservation } = require("../db");
+const postReservationController = require("./postReservationController");
 
 const postOrderController = async function (req, res, next) {
   const { amount, orders, clientId } = req.body;
@@ -27,14 +28,18 @@ const postOrderController = async function (req, res, next) {
         let price = totalPrice(dayPrice, element.startDay, element.endDay);
         amountDB.push(price);
 
-        console.log(price);
-        //creando el registro
-        const item = await OrderDetail.create({
+        const orderDetail = {
           reservationAmount: price,
           startDay: element.startDay,
           endDay: element.endDay,
           professionalId: element.professionalId,
-        });
+        };
+
+        //creando el registro en OrderDetail
+        const item = await OrderDetail.create(orderDetail);
+
+        //creando registro en Reservation
+        await postReservationController(orderDetail);
 
         return item;
       } catch (error) {
@@ -52,7 +57,6 @@ const postOrderController = async function (req, res, next) {
         return { amount, items };
       })
       .then(async (data) => {
-        console.log(data);
         //seteando Order con amount e items
         const newOrder = await Order.create({
           amount: data.amount,
