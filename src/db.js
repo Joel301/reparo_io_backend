@@ -7,8 +7,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 //'postgres://postgres:maty18:5432/reparoio'
 
 const sequelize = new Sequelize(
-  //Trucazo
-  'postgres://postgres:maty18@localhost/reparoio',
+
   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
 
   `postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway`, //DEVELOP
