@@ -44,8 +44,12 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      dayPrice: {
+        type: DataTypes.FLOAT,
+        defaultValue: 0.0,
+      },
       profileImg: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         defaultValue:
           "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
       },
