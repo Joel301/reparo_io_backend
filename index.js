@@ -27,7 +27,7 @@ const { conn } = require("./src/db.js");
 //cambiar mode para modificar modelos
 // mode = { force: true }
 
-mode = { alter: true };
+mode = { force: true };
 
 // Syncing all the models at once.
 conn.sync(mode).then(() => {
