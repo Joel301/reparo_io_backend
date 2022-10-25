@@ -46,7 +46,6 @@ const infoById = async (id) => {
         ? profesionalId.reputation
         : "not available yet",
       professions: profes,
-      review: Math.floor(Math.random() * (5 - 0) + 1)
     };
     return prof;
   } catch (e) {

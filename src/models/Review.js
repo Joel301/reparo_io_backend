@@ -4,17 +4,18 @@ module.exports = (sequelize) => {
     sequelize.define(
         "review", 
         {
-            id: {
+            clientId: {
                 type: DataTypes.UUID,
-                defaultValue: DataTypes.UUIDV4,
                 primaryKey: true,
             },
-
+            professionalId:{
+                type: DataTypes.UUID,
+                primaryKey: true,
+            },
             comment: {
                 type: DataTypes.TEXT,
                 allowNull: false,
             },
-            
             rating:{
                 type: DataTypes.INTEGER,
                 validate:{

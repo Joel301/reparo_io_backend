@@ -15,36 +15,40 @@ const getReviews = async (req, res) => {
 }
 
 const createReview = async (req, res) => {
-    const { clientId: id } = req.params
-    const { professionalId, comment, rating } = req.body
+   
+    const { clientId, professionalId, comment, rating } = req.body
 
     try {
-        const client = await Client.findByPk(id)
+        const client = await Client.findByPk(clientId);
+        
         if (!client) return res.status(400).send({ 
             msg: `El cliente ${id} no existe en la base de datos.` 
         })
 
-        const professional = await Professional.findByPk(professionalId)
+        const professional = await Professional.findByPk(professionalId);
+        console.log(professional);
         if (!professional) return res.status(400).send({ 
             msg: `El professional ${id} no existe en la base de datos.` 
         })
 
-        const iContract = await client.getOrders()
-        const [orders] = iContract
-        if (!iContract.length) return res.status(400).send({ 
-            msg: `No has contratado aún este professional.` 
-        })
+        // const iContract = await client.getOrders()
+        // const [orders] = iContract
+        // if (!iContract.length) return res.status(400).send({ 
+        //     msg: `No has contratado aún este professional.` 
+        // })
 
-        const check = orders.dataValues.details.find(obj => obj.professionalId == professionalId)
-        if (!check) return res.status(400).send({ msg: `No has contratado aún este professional.` })
+        // const check = orders.dataValues.details.find(obj => obj.professionalId == professionalId)
+        // if (!check) return res.status(400).send({ msg: `No has contratado aún este professional.` })
 
         const review = await Review.create({
+        clientId,
+        professionalId,
         comment,
         rating,
         })
 
-    await review.setclient(id)
-    await review.setprofessional(professionalId)
+    // await review.setClient(clientId)
+    // await review.setProfessional(professionalId)
 
     let reviews = await professional.getReviews()
     await Professional.update(
@@ -78,7 +82,7 @@ const createReview = async (req, res) => {
 
 const updateReview = () => {}
 
-const getReviewsprofessional = async (req, res) => {
+const getReviewsProfessional = async (req, res) => {
     const { professionalId: id } = req.params
 
     try {
@@ -97,7 +101,7 @@ const getReviewsprofessional = async (req, res) => {
     }
 }
 
-const getReviewsclient = async (req, res) => {
+const getReviewsClient = async (req, res) => {
     const { clientId: id } = req.params
 
     try {
@@ -120,8 +124,8 @@ module.exports = {
     getReviews,
     createReview,
     updateReview,
-    getReviewsprofessional,
-    getReviewsclient,
+    getReviewsProfessional,
+    getReviewsClient,
 }
 
 // const { Review, Client, Professional } = require('../db')
