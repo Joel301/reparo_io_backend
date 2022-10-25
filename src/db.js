@@ -6,7 +6,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 const sequelize = new Sequelize(
   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
-  `postgres://postgres:RGdeXILyEnk1CVNUbrZW@containers-us-west-33.railway.app:6106/railway`, //DEVELOP
+  `postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway`, //DEVELOP
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
@@ -38,8 +38,16 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Profession, Professional, Prof_Prof, Client, Order_Details, Order, User } =
-  sequelize.models;
+const {
+  Profession,
+  Professional,
+  Prof_Prof,
+  Client,
+  OrderDetail,
+  Order,
+  Reservation,
+  User
+} = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
@@ -51,6 +59,17 @@ Professional.belongsTo(User)
 User.hasOne(Client)
 Client.belongsTo(User)
 
+Client.hasMany(Order);
+Order.belongsTo(Client);
+
+Order.hasMany(OrderDetail);
+OrderDetail.belongsTo(Order);
+
+Professional.hasMany(OrderDetail);
+OrderDetail.belongsTo(Professional);
+
+Professional.hasMany(Reservation);
+Reservation.belongsTo(Professional);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

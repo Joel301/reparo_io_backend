@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     profileImg: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue:
         "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
     },
