@@ -5,7 +5,8 @@ module.exports = (sequelize) => {
     "reservation",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
       startDay: {

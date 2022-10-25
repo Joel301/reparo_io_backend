@@ -27,9 +27,10 @@ const postOrderController = async function (req, res, next) {
         let price = totalPrice(dayPrice, element.startDay, element.endDay);
         amountDB.push(price);
 
+        console.log(price);
         //creando el registro
         const item = await OrderDetail.create({
-          reservationAmount: element.reservationAmount,
+          reservationAmount: price,
           startDay: element.startDay,
           endDay: element.endDay,
           professionalId: element.professionalId,
@@ -51,6 +52,7 @@ const postOrderController = async function (req, res, next) {
         return { amount, items };
       })
       .then(async (data) => {
+        console.log(data);
         //seteando Order con amount e items
         const newOrder = await Order.create({
           amount: data.amount,
