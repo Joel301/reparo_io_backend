@@ -7,10 +7,12 @@ module.exports = (sequelize) => {
             clientId: {
                 type: DataTypes.UUID,
                 primaryKey: true,
+                unique: 'compositeIndex',
             },
             professionalId:{
                 type: DataTypes.UUID,
                 primaryKey: true,
+                unique: 'compositeIndex',
             },
             comment: {
                 type: DataTypes.TEXT,
