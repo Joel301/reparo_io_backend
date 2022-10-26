@@ -8,9 +8,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 const sequelize = new Sequelize(
 
-   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
-
- // `postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway`, //DEVELOP
+ `postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway`, //DEVELOP
 
   {
     logging: false, // set to console.log to see the raw SQL queries
