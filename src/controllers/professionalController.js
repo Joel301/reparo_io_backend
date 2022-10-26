@@ -4,21 +4,30 @@ const { Op } = require("sequelize");
 const isUUID =
   /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
 
-const getAllProfesional = async () => {
-  const results = await Professional.findAll({ include: Profession });
-  return results.map((p) => {         //esto es para solo retornar la profesion en array y excluir el Prof_Prof
-    if (p.professions.length) {
-      return {
-        ...p.dataValues, professions: p.dataValues.professions.map(profemap => {
-          const { id, name } = profemap.dataValues
-          return { id, name }
-        })
-      }
-    } else { return p.dataValues }
-  })
+const getAllProfesional = async (req,res,next) => {
+  try{
+    const results = await Professional.findAll({ include: Profession });
+  if(!results) res.json("no professionals found");
+  else
+    res.json(results.map((p) => {         //esto es para solo retornar la profesion en array y excluir el Prof_Prof
+      if (p.professions.length) {
+        return {
+          ...p.dataValues, professions: p.dataValues.professions.map(profemap => {
+            const { id, name } = profemap.dataValues
+            return { id, name }
+          })
+        }
+      } else { return p.dataValues }
+    }))
+  }
+  catch(error) {
+    error.message="error at getting all professionals";
+    next(error);
+  }
 };
 
-const infoById = async (id) => {
+const getProfessioanlById = async (req,res,next) => {
+  const {id} =req.params;
   try {
     if (!isUUID.test(id)) throw new Error("Invalid UUID Format"); //revisa que sea un uuid para evitar sequelize error
     const profesionalId = await Professional.findOne({
@@ -26,27 +35,27 @@ const infoById = async (id) => {
       include: [{ model: Profession, attributes: ["id", "name"] }],
     });
 
-    if (!profesionalId) throw new Error("not Found");
+    if (!profesionalId) res.json("not Found");
+    else{
+      let profes = profesionalId.professions ? profesionalId.professions : [];
 
-    let profes = profesionalId.professions ? profesionalId.professions : [];
-
-    const prof = {
-      id: profesionalId.id,
-      firstName: profesionalId.firstName,
-      lastName: profesionalId.lastName,
-      profileImg: profesionalId.profileImg,
-      phoneNumber: profesionalId.phoneNumber,
-      address: profesionalId.address,
-      email: profesionalId.email,
-      reputation: profesionalId.reputation
-        ? profesionalId.reputation
-        : "not available yet",
-      professions: profes,
-    };
-    return prof;
+      const prof = {
+        id: profesionalId.id,
+        firstName: profesionalId.firstName,
+        lastName: profesionalId.lastName,
+        profileImg: profesionalId.profileImg,
+        phoneNumber: profesionalId.phoneNumber,
+        address: profesionalId.address,
+        email: profesionalId.email,
+        reputation: profesionalId.reputation
+          ? profesionalId.reputation
+          : "not available yet",
+        professions: profes,
+      };
+      res.json(prof);
+      }
   } catch (e) {
-    e.status = 404;
-    throw e;
+    next(e);
   }
 };
 
@@ -81,20 +90,15 @@ function isStringOk(data) {
       )) throw new Error(`${data} is not an email`)
   }
 
-const postAProfesional = async (profesionalData) => {
-    const {firstName, lastName, address, professions, email} = profesionalData
-
-
+const postAProfesional = async (req,res,next) => {
+    const {firstName, lastName, address, professions, email} = req.body;
     try {
         isStringOk([firstName, lastName, address])
         isEmail(email)
         isArrayOk(professions)
-
-
-        const newProfessional = await Professional.create(profesionalData);
-
+        const newProfessional = await Professional.create(req.body);
         await Promise.all(
-            profesionalData.professions.map(async (p) => {
+            req.body.professions.map(async (p) => {
                 let profesion = {};
                 // esto es para tomar ambos sean objetos o id de profesion
                 isNaN(p)
@@ -106,15 +110,17 @@ const postAProfesional = async (profesionalData) => {
                 newProfessional.addProfession(profesion);
             }))
 
-        return newProfessional.dataValues;
+        res.json({newProfessional,message:"profesional creado"});
         
     } catch (e) {
-        throw e
-    } 
-       
+      e.message = "error creando profesional";
+      next(e);
+    }
 };
 
-const putProfesional = async (profesionalData, id) =>{
+const putProfesional = async (req,res,next) =>{
+  const { id } = req.params;
+  const { body } = req;
   try {
     let updateProfesional= await Professional.findOne({
         where:{
@@ -128,27 +134,28 @@ const putProfesional = async (profesionalData, id) =>{
             }}
     });
     await updateProfesional.update({
-        firstName: profesionalData.firstName,
-        lastName: profesionalData.lastName,
-        phoneNumber: profesionalData.phoneNumber,
-        address: profesionalData.address,
-        aboutMe: profesionalData.aboutMe,
-        profileImg: profesionalData.profileImg
+        firstName: body.firstName,
+        lastName: body.lastName,
+        phoneNumber: body.phoneNumber,
+        address: body.address,
+        aboutMe: body.aboutMe,
+        profileImg: body.profileImg
     });
     let profDb= await Profession.findAll({
         where:{
             name:{
-                [Op.in]: profesionalData.professions,
+                [Op.in]: body.professions,
             },
         },
     });
     await updateProfesional.setProfessions(profDb);
-    return updateProfesional;
+    res.json({updateProfesional,message:"profesional actualizado"});
 } catch (error) {
-    console.log(error);
+    next(error);
 }    
 }
-const delProfesional = async (id) => {
+const delProfesional = async  (req,res,next) =>{
+  const { id } = req.params;
   try {
     const profDelete= await Professional.findByPk(id,{
         include:{
@@ -160,14 +167,13 @@ const delProfesional = async (id) => {
     })
     if(profDelete){
         await profDelete.destroy();
-        return res.send('..Professional deleted!');
+      res.json({profDelete,message:'..Professional deleted!'});
     }
     else
-        return res.send({message: 'not found'});
+        res.send({message: 'professional not found'});
    } catch (error) {
-       console.log(error);
+       next(error);
    }
-  
 }
 
 module.exports = {
@@ -175,5 +181,5 @@ module.exports = {
   postAProfesional,
   putProfesional,
   delProfesional,
-  infoById,
+  getProfessioanlById,
 };
