@@ -3,7 +3,7 @@ const { searchController } = require("../controllers/searchController");
 
 const professionsRoute = require("./professions");
 const profesionalRoute = require("./profesional");
-const testAuth = require("./testAuth");
+const User = require("./User");
 const clientRoute = require("./client");
 const orderRoute = require("./order");
 const { route } = require("./professions");
@@ -12,7 +12,7 @@ const router = Router();
 
 router.use("/professionals", profesionalRoute);
 router.use("/professions", professionsRoute);
-router.use("/test", testAuth)
+router.use("/user", User)
 router.use("/clients", clientRoute);
 router.use("/orders", orderRoute);
 router.get("/", searchController);
