@@ -44,9 +44,10 @@ const searchService = async function (search) {
         profileImg: element.profileImg
           ? element.profileImg
           : "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
-        professions: element.professions.map((element) => {
-          return element.name;
-        }),
+          professions: element.professions
+        // professions: element.professions.map((element) => {
+        //   return element.name;
+        // }),
       });
     });
 
