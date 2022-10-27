@@ -1,4 +1,3 @@
-// const { Professional, Profession } = require("../db.js");
 const { User } = require("../db.js");
 const postClient = require("./postClient.js");
 
