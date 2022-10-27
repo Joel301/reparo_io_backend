@@ -9,18 +9,13 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      startDay: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      endDay: {
-        type: DataTypes.DATE,
-        allowNull: false,
+      days: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
       },
     },
     {
       timestamps: false,
-      createdAt: false,
     }
   );
 };

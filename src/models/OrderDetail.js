@@ -11,12 +11,8 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
       defaultValue: 0.0,
     },
-    startDay: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    endDay: {
-      type: DataTypes.DATE,
+    days: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },
   });

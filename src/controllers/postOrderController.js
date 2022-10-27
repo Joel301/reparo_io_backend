@@ -2,7 +2,7 @@ const { Order, OrderDetail, Professional, Reservation } = require("../db");
 const postReservationController = require("./postReservationController");
 
 const postOrderController = async function (req, res, next) {
-  const { amount, orders, clientId } = req.body;
+  const { orders, clientId } = req.body;
 
   try {
     //Deberia haber una busqueda del dayPrice de cada Professional en la orden
@@ -15,36 +15,45 @@ const postOrderController = async function (req, res, next) {
     const amountDB = [];
 
     //seteando OrderDetails de Order
+    //{
+    //professionalId,
+    //days,
+    //reservationAmount
+    //}
 
-    const items = orders.map(async (element) => {
-      try {
-        const prof = await Professional.findOne({
-          where: { id: element.professionalId },
-        });
+    const items = await orders.map(async (element) => {
+      const prof = await Professional.findOne({
+        where: { id: element.professionalId },
+      });
 
-        let dayPrice = prof.getDataValue("dayPrice");
+      let stockError = element.days.find(
+        (day) => !prof.availableDays.includes(day)
+      );
+      console.log(stockError);
+      if (stockError)
+        return { error: `${stockError} no esta disponible en stock` };
 
-        //calculando el total segun la cantidad de dias
-        let price = totalPrice(dayPrice, element.startDay, element.endDay);
-        amountDB.push(price);
+      let dayPrice = await prof.getDataValue("dayPrice");
 
-        const orderDetail = {
-          reservationAmount: price,
-          startDay: element.startDay,
-          endDay: element.endDay,
-          professionalId: element.professionalId,
-        };
+      //Aca va una verificaciones del precio
 
-        //creando el registro en OrderDetail
-        const item = await OrderDetail.create(orderDetail);
+      //calculando el total segun la cantidad de dias
+      let price = totalPrice(dayPrice, element.days);
+      amountDB.push(price);
 
-        //creando registro en Reservation
-        await postReservationController(orderDetail);
+      const orderDetail = {
+        reservationAmount: price,
+        days: element.days,
+        professionalId: element.professionalId,
+      };
 
-        return item;
-      } catch (error) {
-        throw error;
-      }
+      //creando el registro en OrderDetail
+      const item = await OrderDetail.create(orderDetail);
+
+      //creando registro en Reservation
+      const newReservation = await postReservationController(orderDetail);
+      await newReservation.setOrderDetail(item);
+      return item;
     });
 
     Promise.all(items)
@@ -52,7 +61,7 @@ const postOrderController = async function (req, res, next) {
         //calculando amount de Order
         let amount = amountDB.reduce((prev, curr) => {
           return prev + curr;
-        });
+        }, 0);
 
         return { amount, items };
       })
@@ -62,24 +71,32 @@ const postOrderController = async function (req, res, next) {
           amount: data.amount,
           clientId,
         });
-        await newOrder.addOrderDetails(data.items);
+        //Agregar relaciones
         data.items.forEach(async (element) => {
+          if (element.error) return null;
+          await newOrder.addOrderDetail(element);
+        });
+
+        // await newOrder.addOrderDetails(data.items);
+        data.items.forEach(async (element) => {
+          if (element.error) return null;
           await element.setOrder(newOrder);
         });
-        res.json({ message: "order created" });
+
+        res.json({ newOrder, orders: data.items });
       });
   } catch (error) {
     next(error);
   }
 };
 
-function totalPrice(price, start, end) {
-  let a = new Date(start).getTime();
-  let b = new Date(end).getTime();
-  let dif = b - a;
-  if (dif === 0) return price;
-  let total = (price * dif) / (1000 * 60 * 60 * 24); //transformacion milisegundos
-
+function totalPrice(price, days) {
+  // let a = new Date(start).getTime();
+  // let b = new Date(end).getTime();
+  // let dif = b - a;
+  // if (dif === 0) return price;
+  // let total = (price * dif) / (1000 * 60 * 60 * 24); //transformacion milisegundos
+  let total = price * days.length;
   return total;
 }
 
