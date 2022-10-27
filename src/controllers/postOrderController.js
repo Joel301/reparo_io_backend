@@ -2,7 +2,7 @@ const { Order, OrderDetail, Professional, Reservation } = require("../db");
 const postReservationController = require("./postReservationController");
 
 const postOrderController = async function (req, res, next) {
-  const { amount, orders, clientId } = req.body;
+  const { orders, clientId } = req.body;
 
   try {
     //Deberia haber una busqueda del dayPrice de cada Professional en la orden
@@ -15,36 +15,38 @@ const postOrderController = async function (req, res, next) {
     const amountDB = [];
 
     //seteando OrderDetails de Order
+    //{
+    //professionalId,
+    //days,
+    //reservationAmount
+    //}
 
     const items = orders.map(async (element) => {
-      try {
-        const prof = await Professional.findOne({
-          where: { id: element.professionalId },
-        });
+      const prof = await Professional.findOne({
+        where: { id: element.professionalId },
+      });
 
-        let dayPrice = prof.getDataValue("dayPrice");
+      let dayPrice = await prof.getDataValue("dayPrice");
 
-        //calculando el total segun la cantidad de dias
-        let price = totalPrice(dayPrice, element.startDay, element.endDay);
-        amountDB.push(price);
+      //Aca va una verificaciones del precio
 
-        const orderDetail = {
-          reservationAmount: price,
-          startDay: element.startDay,
-          endDay: element.endDay,
-          professionalId: element.professionalId,
-        };
+      //calculando el total segun la cantidad de dias
+      let price = totalPrice(dayPrice, element.days);
+      amountDB.push(price);
 
-        //creando el registro en OrderDetail
-        const item = await OrderDetail.create(orderDetail);
+      const orderDetail = {
+        reservationAmount: price,
+        days: element.days,
+        professionalId: element.professionalId,
+      };
 
-        //creando registro en Reservation
-        await postReservationController(orderDetail);
+      //creando el registro en OrderDetail
+      const item = await OrderDetail.create(orderDetail);
 
-        return item;
-      } catch (error) {
-        throw error;
-      }
+      //creando registro en Reservation
+      const newReservation = await postReservationController(orderDetail);
+      await newReservation.setOrderDetail(item);
+      return item;
     });
 
     Promise.all(items)
@@ -69,17 +71,18 @@ const postOrderController = async function (req, res, next) {
         res.json({ message: "order created" });
       });
   } catch (error) {
+    console.log("HI FROM CATCH");
     next(error);
   }
 };
 
-function totalPrice(price, start, end) {
-  let a = new Date(start).getTime();
-  let b = new Date(end).getTime();
-  let dif = b - a;
-  if (dif === 0) return price;
-  let total = (price * dif) / (1000 * 60 * 60 * 24); //transformacion milisegundos
-
+function totalPrice(price, days) {
+  // let a = new Date(start).getTime();
+  // let b = new Date(end).getTime();
+  // let dif = b - a;
+  // if (dif === 0) return price;
+  // let total = (price * dif) / (1000 * 60 * 60 * 24); //transformacion milisegundos
+  let total = price * days.length;
   return total;
 }
 
