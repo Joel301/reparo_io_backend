@@ -4,9 +4,12 @@ const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
+
+
 const sequelize = new Sequelize(
-  // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
+
   `postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway`, //DEVELOP
+
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
@@ -38,6 +41,9 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
+
+
+
 const {
   Profession,
   Professional,
@@ -47,14 +53,17 @@ const {
   Order,
   Reservation,
   User,
-  Admin
+  Admin,
+  Review,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
+//  PROFESIONALES---PROFESIONES
 Professional.belongsToMany(Profession, { through: Prof_Prof });
 Profession.belongsToMany(Professional, { through: Prof_Prof });
 
+//  PROFESIONALES---USUARIOS---ADMIN----CLIENT
 User.belongsTo(Professional)
 Professional.hasOne(User)
 User.belongsTo(Client)
@@ -62,8 +71,14 @@ Client.hasOne(User)
 User.belongsTo(Admin)
 Admin.hasOne(User)
 
+//  PROFESIONALES---REVIEWS----CLIENT
+Review.belongsTo(Professional);
+
+Client.hasMany(Review);
+Review.belongsTo(Client);
+
+//  CARRITO EMPIEZA AQUI
 Client.hasMany(Order);
-Order.belongsTo(Client);
 
 Order.hasMany(OrderDetail);
 OrderDetail.belongsTo(Order);
@@ -73,6 +88,10 @@ OrderDetail.belongsTo(Professional);
 
 Professional.hasMany(Reservation);
 Reservation.belongsTo(Professional);
+
+OrderDetail.hasOne(Reservation);
+Reservation.belongsTo(OrderDetail);
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
