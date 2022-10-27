@@ -21,10 +21,17 @@ const postOrderController = async function (req, res, next) {
     //reservationAmount
     //}
 
-    const items = orders.map(async (element) => {
+    const items = await orders.map(async (element) => {
       const prof = await Professional.findOne({
         where: { id: element.professionalId },
       });
+
+      let stockError = element.days.find(
+        (day) => !prof.availableDays.includes(day)
+      );
+      console.log(stockError);
+      if (stockError)
+        return { error: `${stockError} no esta disponible en stock` };
 
       let dayPrice = await prof.getDataValue("dayPrice");
 
@@ -54,7 +61,7 @@ const postOrderController = async function (req, res, next) {
         //calculando amount de Order
         let amount = amountDB.reduce((prev, curr) => {
           return prev + curr;
-        });
+        }, 0);
 
         return { amount, items };
       })
@@ -64,14 +71,21 @@ const postOrderController = async function (req, res, next) {
           amount: data.amount,
           clientId,
         });
-        await newOrder.addOrderDetails(data.items);
+        //Agregar relaciones
         data.items.forEach(async (element) => {
+          if (element.error) return null;
+          await newOrder.addOrderDetail(element);
+        });
+
+        // await newOrder.addOrderDetails(data.items);
+        data.items.forEach(async (element) => {
+          if (element.error) return null;
           await element.setOrder(newOrder);
         });
-        res.json({ message: "order created" });
+
+        res.json({ newOrder, orders: data.items });
       });
   } catch (error) {
-    console.log("HI FROM CATCH");
     next(error);
   }
 };

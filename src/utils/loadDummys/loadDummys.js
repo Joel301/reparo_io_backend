@@ -18,6 +18,7 @@ function getADummy() {
     aboutMe: faker.lorem.sentence(),
     email: faker.internet.email(),
     password: faker.lorem.word(),
+    dayPrice: 1500.0,
     professions: [
       Math.floor(Math.random() * (20 - 0) + 1),
       Math.floor(Math.random() * (20 - 0) + 1),

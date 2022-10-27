@@ -1,130 +1,94 @@
 # Descripcion de rutas del backend
 
-## GET [URL]/home?search=[texto]
+## Rutas API
 
--   Busca en la DB coincidencias en el nombre y apeido del usuario
--   Retorna array de Profesionales
--   En caso de no encontrar Resultados Devuelve un array con el texto "No professional found" y status 204
--   El formato de profesionales es:
+## Professions
+-   ### Mostrar todo _professional_
 
 ```
-[
-    {
-    "id": "66cf3768-37e2-41cc-af94-47a77fc2946b",
-    "firstName": "hiram",
-    "lastName": "rivero",
-    "phoneNumber": 111111111,
-    "address": "hola estoy aqui",
-    "aboutMe": "soy un pokemon",
-    "profileImg": "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png"
-}
-]
+  GET https://reparoiobackend-main.up.railway.app/home/professionals
+```
+```
+[{
+        id: "93fdab72-6b0c-4b4d-a33f-f44774e7063c",
+        firstName: "antonio",
+        lastName: "gonzales",
+        phoneNumber: 111111111,
+        address: "hola estoy aqui",
+        aboutMe: "There's no description available",
+        email: "afrodito@reparo.io",
+        password: "123",
+        profileImg: "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
+        professions: [
+            {
+                "id": 10,
+                "name": "plomero",
+                "Prof_Prof": {
+                    "professionalId": "93fdab72-6b0c-4b4d-a33f-f44774e7063c",
+                    "professionId": 10
+                }
+            }
+        ]
+    }]
 ```
 
-## GET [URL]/home/professions
+-   ### Buscar _professional_ por _id_
 
--   Regresa un Array de Profesiones
--   El formato es :
+```
+  GET https://reparoiobackend-main.up.railway.app/home/professionals/${id}
+```
 
-```[
-    {
-        "id": 8,
-        "name": "jardinero"
-        },
+```
+{
+    id: "6bf9016f-427c-465a-97bb-332a283713b4",
+    firstName: "lucas",
+    lastName: "ca;o ramirez",
+    profileImg: "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
+    reputation: "not available yet",
+    professions: [
         {
-        "id": 10,
-        "name": "plomero"
-        },
-        {
-        "id": 6,
-        "name": "gasista"
+            "id": 10,
+            "name": "plomero",
+            "Prof_Prof": {
+                "professionalId": "6bf9016f-427c-465a-97bb-332a283713b4",
+                "professionId": 10
+            }
         }
     ]
-
-```
-
-## GET [URL]/home/professionals
-
--   Busca en la DB lista completa de Profesionales
--   Retorna array de Profesionales
--   En caso de no encontrar Resultados Devuelve un array vacio
--   El formato de profesionales es:
-
-```
-[
-    {
-    "id": "66cf3768-37e2-41cc-af94-47a77fc2946b",
-    "firstName": "hiram",
-    "lastName": "rivero",
-    "phoneNumber": 111111111,
-    "address": "hola estoy aqui",
-    "aboutMe": "soy un pokemon",
-    "profileImg": "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png"
-},
-]
-```
-
-## GET [URL]/home/professionals/:id
-
--   Busca retorna el detalle de la info de el profesional segun id, debe ser coincidencia exacta
--   En caso de no encontrar Resultados Devuelve status 404 y el texto **not Found**
--   En caso de enviar un id que no sea uuid Devuelve status 404 y el texto **Invalid UUID Format**
--   El formato de profesionales es:
-
-```
-{
-    "id": "51bfacc5-ca28-4f99-895c-e0d2e4bd70c1",
-    "firstName": "hiram",
-    "lastName": "rivero",
-    "profileImg": "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
-    "reputation": "not available yet",
-    "professions": [
-    {
-        "id": 5,
-        "name": "electricista",
-        "Prof_Prof": {
-            "professionalId": "51bfacc5-ca28-4f99-895c-e0d2e4bd70c1",
-            "professionId": 5
-    }
-    },
-    {
-        "id": 10,
-        "name": "plomero",
-        "Prof_Prof": {
-        "professionalId": "51bfacc5-ca28-4f99-895c-e0d2e4bd70c1",
-        "professionId": 10
-    }
-    }
-    ]
 }
 ```
 
-## POST [URL]/home/professionals
+-   ### Buscar _professional_ por nombre o apellido
 
--   El campo firstName es requerido
--   Al ser id generado se puede duplicar
--   el array professions admite array de nombres **coincidencia exacta** y array de id's mezclado
--   FORMATO PARA ENVIARLO:
+```
+    GET https://reparoiobackend-main.up.railway.app/home?search={search}
+```
 
+
+-   ### Agregar un professional
+```
+    POST  https://reparoiobackend-main.up.railway.app/home/professionals
+```
+Requiere:
 ```
 {
-    "firstName": "hiram",
-    "lastName": "rivero",
-    "password": "123",
-    "email": "juanito@reparo.io",
-    "phoneNumber": 111111111,
-    "profileImg": "url",
-    "aboutMe": "soy un pokemon",
-    "address": "hola estoy aqui",
-    "professions": ["electricista", "plomero"]
-
-}‌
+    id: STRING,
+    firstName: STRING,
+    lastName: STRING,
+    profileImg: STRING,
+    address: STRING,
+    phoneNumber: STRING,
+    email: STRING,
+    password: STRING,
+    professions: []
+}
 ```
 
--   RESPUESTA:
 
-{message: “agregado”}
+---
+##  Clients
+-   ### Agregar un client
+```
+  POST _todavia no se pasa a produccion_
+```
 
--   Si Error:
-
-STRING(mensaje del error)

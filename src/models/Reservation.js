@@ -11,7 +11,7 @@ module.exports = (sequelize) => {
       },
       days: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false,
+        defaultValue: [],
       },
     },
     {

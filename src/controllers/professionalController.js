@@ -1,4 +1,4 @@
-const { Professional, Profession } = require("../db.js");
+const { Professional, Profession, Reservation } = require("../db.js");
 const { Op } = require("sequelize");
 const postProfessionalService = require("../services/postProfessionalService.js");
 const getAllProfessionalService = require("../services/getAllProfessionalService.js");
@@ -46,6 +46,17 @@ const getProfessioanlById = async (req, res, next) => {
     else {
       let profes = profesionalId.professions ? profesionalId.professions : [];
 
+      //obteniendo disponibilidad
+      const allReservations = Reservation.findAll({
+        where: { profesionalId: id },
+      });
+
+      const stock = profesionalId.availableDays.filter((day) => {
+        return allReservations.forEach((element) => {
+          if (element.days.includes(day)) return false;
+        });
+      });
+
       const prof = {
         id: profesionalId.id,
         firstName: profesionalId.firstName,
@@ -57,6 +68,7 @@ const getProfessioanlById = async (req, res, next) => {
         reputation: profesionalId.reputation
           ? profesionalId.reputation
           : "not available yet",
+        stock,
         professions: profes,
       };
       res.json(prof);

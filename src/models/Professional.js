@@ -45,6 +45,10 @@ module.exports = (sequelize) => {
         type: DataTypes.FLOAT,
         defaultValue: 0.0,
       },
+      availableDays: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
       profileImg: {
         type: DataTypes.TEXT,
         defaultValue:
