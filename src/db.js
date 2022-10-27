@@ -7,6 +7,7 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 
 const sequelize = new Sequelize(
+
   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
   //`postgres://postgres:RGdeXILyEnk1CVNUbrZW@containers-us-west-33.railway.app:6106/railway`, //DEVELOP
   "postgresql://postgres:StAexDOXnSaL6lHRmIRM@containers-us-west-94.railway.app:5680/railway", //PRODUCCION
@@ -53,23 +54,33 @@ const {
   OrderDetail,
   Order,
   Reservation,
+  User,
+  Admin,
   Review,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
+//  PROFESIONALES---PROFESIONES
 Professional.belongsToMany(Profession, { through: Prof_Prof });
 Profession.belongsToMany(Professional, { through: Prof_Prof });
 
+//  PROFESIONALES---USUARIOS---ADMIN----CLIENT
+User.belongsTo(Professional)
+Professional.hasOne(User)
+User.belongsTo(Client)
+Client.hasOne(User)
+User.belongsTo(Admin)
+Admin.hasOne(User)
 
-Professional.hasMany(Review);
+//  PROFESIONALES---REVIEWS----CLIENT
 Review.belongsTo(Professional);
 
 Client.hasMany(Review);
 Review.belongsTo(Client);
 
+//  CARRITO EMPIEZA AQUI
 Client.hasMany(Order);
-Order.belongsTo(Client);
 
 Order.hasMany(OrderDetail);
 OrderDetail.belongsTo(Order);

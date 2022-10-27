@@ -3,9 +3,8 @@ const { searchController } = require("../controllers/searchController");
 
 const professionsRoute = require("./professions");
 const profesionalRoute = require("./profesional");
-
+const User = require("./User");
 const reviewsRoute = require("./reviews");
-
 const clientRoute = require("./client");
 const orderRoute = require("./order");
 const { route } = require("./professions");
@@ -14,10 +13,8 @@ const router = Router();
 
 router.use("/professionals", profesionalRoute);
 router.use("/professions", professionsRoute);
-
+router.use("/user", User)
 router.use("/reviews", reviewsRoute);
-//router.use("/client", clientRoute);
-
 router.use("/clients", clientRoute);
 router.use("/orders", orderRoute);
 
