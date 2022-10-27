@@ -1,6 +1,6 @@
 const { User } = require("../db.js");
+const postProfessionalService = require("../services/postProfessionalService.js");
 const postClient = require("./postClient.js");
-const { postProfesionalFunction } = require("./professionalController.js");
 
 // const { postAProfesional } = require("./professional");
 
@@ -9,7 +9,7 @@ async function PostUser(userdata) {
         const { email, authid, isProfessional, isClient, ...data } = userdata
         const newUsuario = await User.create({ email, uid: authid })
         if (isProfessional) {
-            const newProfessional = await postProfesionalFunction({ ...data, email })
+            const newProfessional = await postProfessionalService({ ...data, email })
             await newUsuario.setProfessional(newProfessional)
         }
         if (isClient) {
