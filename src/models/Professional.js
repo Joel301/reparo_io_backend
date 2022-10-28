@@ -35,17 +35,22 @@ module.exports = (sequelize) => {
         validate: {
           isEmail: true,
         },
-        unique: {
-          args: true,
-          msg: "Email address already in use!",
-        },
+        unique: true,
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      dayPrice: {
+        type: DataTypes.FLOAT,
+        defaultValue: 0.0,
+      },
+      availableDays: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: [],
+      },
       profileImg: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         defaultValue:
           "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
       },
