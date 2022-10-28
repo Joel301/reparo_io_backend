@@ -31,7 +31,9 @@ const postOrderController = async function (req, res, next) {
       );
       console.log(stockError);
       if (stockError)
-        return { error: `${stockError} no esta disponible en stock` };
+        return {
+          error: `${stockError} no esta disponible en stock. No se agregara a la reservacion de ${prof.firstName}`,
+        };
 
       let dayPrice = await prof.getDataValue("dayPrice");
 
@@ -51,8 +53,10 @@ const postOrderController = async function (req, res, next) {
       const item = await OrderDetail.create(orderDetail);
 
       //creando registro en Reservation
-      const newReservation = await postReservationController(orderDetail);
-      await newReservation.setOrderDetail(item);
+      //el registro de Reservatin deberia crearse al finalizar la transaccion
+      //   const newReservation = await postReservationController(orderDetail);
+      //   await newReservation.setOrderDetail(item);
+
       return item;
     });
 
