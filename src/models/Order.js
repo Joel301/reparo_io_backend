@@ -11,5 +11,29 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    saleDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      default: DataTypes.NOW
+    },
+
+    saleTime:{
+        type: DataTypes.TIME,
+        allowNull: false,
+        default: DataTypes.NOW
+    },
+
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1
+    },
+
+    paymentStatus: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
   });
 };

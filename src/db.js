@@ -4,13 +4,11 @@ const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
-//'postgres://postgres:maty18:5432/reparoio'
-
+  // 'postgres://postgres:maty18:5432/reparoio'
 const sequelize = new Sequelize(
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
 
-  // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
-
-  `postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway`, //DEVELOP
+  // `postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway`, //DEVELOP
 
   {
     logging: false, // set to console.log to see the raw SQL queries
