@@ -10,6 +10,8 @@ const clientRoute = require("./client");
 const orderRoute = require("./order");
 const { route } = require("./professions");
 
+const mercadoPago = require('./mercadopago');
+
 const router = Router();
 
 router.use("/professionals", profesionalRoute);
@@ -22,6 +24,10 @@ router.use("/clients", clientRoute);
 router.use("/orders", orderRoute);
 
 router.get("/", searchController);
+
+router.use("/mercado", mercadoPago);
+
+
 
 router.use((err, req, res, next) => {
   // eslint-disable-line no-unused-vars

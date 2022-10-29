@@ -1,34 +1,22 @@
-const { Router } = require('express');
+const Router = require('express');
+const { createOrder, handleStatus } = require('../controllers/mercadoPagoController');
+const orderStatus = require('../controllers/orderStatusControllers');
+
 const router = Router();
-require('dotenv').config();
 
-const mercadopago = require("mercadopago");
+router.post("/", createOrder);
+router.get('/status', handleStatus);
+router.put("/", async function (req, res) {
+    try {
+        const data = req.body;
+        const changedOrder= await orderStatus(data);
+        if(changedOrder){
+        return res.send(changedOrder)
+        }
+    return res.send({ error: "I couldn't change the order" });
+    } catch (err) {
+        console.log(err);
+    }
+    });
 
-const { PROD_ACCESS_TOKEN } = process.env;
-
-mercadopago.configure({
-    access_token: PROD_ACCESS_TOKEN,
-});
-
-
-//Orden de compra, obj preferencia
-let preference = {
-    items: [
-        {
-            title: "Mi producto",
-            unit_price: 100,
-            quantity: 1,
-        },
-    ],
-};
-
-//Devuelve la preferencia mp con datos adicionales
-mercadopago.preferences
-.create(preference)
-.then(function (response) {
-
-})
-
-.catch(function (error) {
-    console.log(error);
-});
+module.exports = router;

@@ -53,6 +53,7 @@ const {
   Order,
   Reservation,
   Review,
+  Cart,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -81,6 +82,12 @@ Reservation.belongsTo(Professional);
 
 OrderDetail.hasOne(Reservation);
 Reservation.belongsTo(OrderDetail);
+////////////////////////////////////
+Client.hasMany(Cart);
+Cart.belongsTo(Client);
+
+Professional.hasMany(Cart);
+Cart.belongsTo(Professional);
 
 
 module.exports = {
