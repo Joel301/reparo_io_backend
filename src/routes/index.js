@@ -7,16 +7,18 @@ const User = require("./User");
 const reviewsRoute = require("./reviews");
 const clientRoute = require("./client");
 const orderRoute = require("./order");
+const cartRoute = require("./cart");
 const { route } = require("./professions");
 
 const router = Router();
 
 router.use("/professionals", profesionalRoute);
 router.use("/professions", professionsRoute);
-router.use("/user", User)
+router.use("/user", User);
 router.use("/reviews", reviewsRoute);
 router.use("/clients", clientRoute);
 router.use("/orders", orderRoute);
+router.use("/cart", cartRoute);
 
 router.get("/", searchController);
 
