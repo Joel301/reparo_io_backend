@@ -5,7 +5,7 @@ const orderStatus = async (data) => {
     try {
         const { ordersIds, purchaseId } = data;
 
-        const newCart = await Cart.findOne({where: {payment_id: purchaseId}});
+        const newCart = await Cart.findOne({where: {paymentId: purchaseId}});
         let fullPrice = 0;
         for (const order of ordersIds) {
         const foundOrder = await Order.findByPk(order);
@@ -28,3 +28,7 @@ const orderStatus = async (data) => {
 }
 
 module.exports = orderStatus;
+//Model cart 
+// paymentId: {
+//     type: DataTypes.INTEGER
+// },
