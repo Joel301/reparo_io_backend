@@ -6,10 +6,8 @@ const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 const sequelize = new Sequelize(
   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
-  //`postgres://postgres:RGdeXILyEnk1CVNUbrZW@containers-us-west-33.railway.app:6106/railway`,
   //"postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway", //DEVELOP
   "postgresql://postgres:StAexDOXnSaL6lHRmIRM@containers-us-west-94.railway.app:5680/railway", //PRODUCCION
-
   {
     logging: false, // set to console.log to see the raw SQL queries
     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
@@ -53,6 +51,8 @@ const {
   User,
   Admin,
   Review,
+  Cart,
+  CartDetail,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -76,6 +76,16 @@ Client.hasMany(Review);
 Review.belongsTo(Client);
 
 //  CARRITO EMPIEZA AQUI
+Client.hasOne(Cart);
+Cart.belongsTo(Client);
+
+Cart.hasMany(CartDetail);
+CartDetail.belongsTo(Cart);
+
+Professional.hasMany(CartDetail);
+CartDetail.belongsTo(Professional);
+
+// COMPRAS
 Client.hasMany(Order);
 
 Order.hasMany(OrderDetail, {

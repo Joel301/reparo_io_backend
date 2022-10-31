@@ -25,6 +25,7 @@ function getADummy() {
       Math.floor(Math.random() * (20 - 0) + 1),
       Math.floor(Math.random() * (20 - 0) + 1),
     ],
+    availableDays: ["lunes", "martes"],
   };
 }
 
