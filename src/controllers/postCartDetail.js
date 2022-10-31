@@ -26,8 +26,12 @@ const postCartDetail = async function (req, res, next) {
     await prof.addCartDetail(newCartDetail);
 
     //Agregando el nuevo item al carrito
-
     await cart.addCartDetail(newCartDetail);
+
+    //Recalculando total del carrito
+    let newCartAmount = cart.amount + reservationAmount;
+
+    await cart.update({ amount: newCartAmount });
 
     res.json({ message: "creado", newCartDetail });
   } catch (error) {
