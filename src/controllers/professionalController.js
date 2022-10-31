@@ -47,15 +47,15 @@ const getProfessioanlById = async (req, res, next) => {
       let profes = profesionalId.professions ? profesionalId.professions : [];
 
       //obteniendo disponibilidad
-      const allReservations = Reservation.findAll({
-        where: { profesionalId: id },
-      });
+      //const allReservations = Reservation.findAll({
+      //  where: { profesionalId: id },
+      //});
 
-      const stock = profesionalId.availableDays.filter((day) => {
-        return allReservations.forEach((element) => {
-          if (element.days.includes(day)) return false;
-        });
-      });
+      //const stock = profesionalId.availableDays.filter((day) => {
+      //  return allReservations.forEach((element) => {
+       //   if (element.days.includes(day)) return false;
+      //  });
+     // });
 
       const prof = {
         id: profesionalId.id,
@@ -68,7 +68,7 @@ const getProfessioanlById = async (req, res, next) => {
         reputation: profesionalId.reputation
           ? profesionalId.reputation
           : "not available yet",
-        stock,
+      //  stock,
         professions: profes,
       };
       res.json(prof);
