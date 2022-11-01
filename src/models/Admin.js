@@ -1,8 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define("client", 
-  {
+  sequelize.define("admin", {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -10,27 +9,30 @@ module.exports = (sequelize) => {
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     phoneNumber: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     address: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      // allowNull: false,
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
-        validate: {
-        isEmail: true,
-      },
-      unique: true,
+      // allowNull: false,
+      // validate: {
+      //   isEmail: true,
+      // },
+      // unique: {
+      //   args: true,
+      //   msg: "Email address already in use!",
+      // },
     },
     password: {
       type: DataTypes.STRING,
@@ -45,13 +47,5 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
-  },
-
-  {
-    timestamps: false,
-    createdAt: false,
-  }
-);
-  
-
+  });
 };

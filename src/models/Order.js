@@ -8,8 +8,8 @@ module.exports = (sequelize) => {
       primaryKey: true,
     },
     amount: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: DataTypes.FLOAT,
+      defaultValue: 0.0,
     },
 
     saleDate: {
