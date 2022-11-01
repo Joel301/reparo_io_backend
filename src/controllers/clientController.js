@@ -36,7 +36,10 @@ const getClientsController = async function (req, res, next) {
 const getClientController = async function (req, res, next) {
   const { id } = req.params;
   try {
-    const client = await Client.findOne({ where: { id: id } });
+    const client = await Client.findOne({
+      where: { id: id },
+      include: { model: Cart, attributes: ["id"] },
+    });
 
     if (!client) res.json("Not found");
     else res.json(client);
