@@ -1,29 +1,19 @@
 const mercadopago = require('mercadopago');
 require('dotenv').config();
-const { PROD_ACCESS_TOKEN } = process.env;
+const { ACCESS_TOKEN } = process.env;
 const { Cart } = require('../db');
 
 const createOrder = async (req, res, next) => {
     mercadopago.configure({
-        access_token: PROD_ACCESS_TOKEN
+        access_token: "TEST-2189850164427787-102808-b60c4d5b1e04ade5dd5fb4d2b23020eb-9479690"
     });
-
+console.log(req.body);
     //Orden de compra, obj preferencia
-    const allOrders = carrito.map(item => ({
+  const allOrders = req.body.map(item => ({
         title: item.title,
         unit_price: item.price,
         quantity: item.quantity,
     }));
-
-    // let preference = {
-    //     items: [
-    //         {
-    //             title: "Mi producto",
-    //             unit_price: 100,
-    //             quantity: 1,
-    //         },
-    //     ],
-    // };
 
     const preference = {
         items: allOrders,
@@ -33,16 +23,16 @@ const createOrder = async (req, res, next) => {
             pending: 'http://localhost:3001/home/mercado/status',
             success: 'http://localhost:3001/home/mercado/status',
         },
+        notification_url: "https://fd10-138-186-154-240.sa.ngrok.io/home/mercado/notificar"
     };
 
-    //Devuelve la preferencia mp con datos adicionales
     mercadopago.preferences.create(preference)
-        .then((data) => {
-            res.status(200).send({ url: data.response.init_point }); //url de mercado pago
+        .then(function (data) {
+             res.status(200).send(data.body.init_point); //url de mercado pago
         })
-        .catch((e) => {
-            res.status(400).json(e);
-            next();
+        .catch(function (e) {
+            console.log(e);
+             next();
         });
 };
 

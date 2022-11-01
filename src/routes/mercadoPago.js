@@ -6,6 +6,12 @@ const router = Router();
 
 router.post("/", createOrder);
 router.get('/status', handleStatus);
+
+router.post("/notificar", (req,res) =>{
+    console.log("notificar PAGO")
+    res.send("notificar");
+});
+
 router.put("/", async function (req, res) {
     try {
         const data = req.body;
