@@ -24,11 +24,7 @@ const orderStatus = async (data) => {
 } catch (error) {
     console.log(error)
     return false;
-}
+    }
 }
 
 module.exports = orderStatus;
-//Model cart 
-// paymentId: {
-//     type: DataTypes.INTEGER
-// },
