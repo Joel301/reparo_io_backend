@@ -4,11 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
-
 const sequelize = new Sequelize(
   // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
-  //"postgresql://postgres:nVqZlTmsw0QiBByyVOAD@containers-us-west-43.railway.app:6056/railway", //DEVELOP
-  "postgresql://postgres:StAexDOXnSaL6lHRmIRM@containers-us-west-94.railway.app:5680/railway", //PRODUCCION
+  "postgresql://postgres:R9QP0NLfu1I2XSq1w3e4@containers-us-west-66.railway.app:6000/railway", //DEVELOP
+  // "postgresql://postgres:StAexDOXnSaL6lHRmIRM@containers-us-west-94.railway.app:5680/railway", //PRODUCCION
 
   {
     logging: false, // set to console.log to see the raw SQL queries
@@ -54,7 +53,7 @@ const {
   Admin,
   Review,
   Cart,
-
+  CartDetail,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
