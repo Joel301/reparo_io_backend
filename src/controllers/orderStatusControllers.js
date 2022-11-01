@@ -1,4 +1,4 @@
-const {Order, Cart, Professional} = require('../../db.js');
+const {Order, Cart, Professional} = require('../db.js');
 
 const orderStatus = async (data) => {
     
