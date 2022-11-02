@@ -1,14 +1,19 @@
 const Router = require('express');
-const { createOrder, handleStatus } = require('../controllers/mercadoPagoController');
+const { createOrder, handleSuccess, handlePending } = require('../controllers/mercadoPagoController');
 const orderStatus = require('../controllers/orderStatusControllers');
 
 const router = Router();
 
 router.post("/", createOrder);
-router.get('/status', handleStatus);
+router.get('/success', handleSuccess);
+router.get('/pending', handlePending);
 
 router.post("/notificar", (req,res) =>{
-    console.log("notificar PAGO")
+    const {action} = req.body;
+
+    console.log(req.body);
+    if(action)
+    console.log(action);
     res.send("notificar");
 });
 
