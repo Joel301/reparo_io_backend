@@ -23,6 +23,7 @@ const server = require("./src/app.js");
 const port = process.env.PORT || 3001;
 
 const { conn } = require("./src/db.js");
+const { preloadProfs } = require("./src/utils/preLoadProfs.js");
 
 //cambiar mode para modificar modelos
 // mode = { force: true }
@@ -31,7 +32,9 @@ mode = { alter: true };
 
 // Syncing all the models at once.
 conn.sync(mode).then(() => {
-  server.listen(port, () => {
-    console.log("%s listening at 3001"); // eslint-disable-line no-console
-  });
+    preloadProfs();
+}).then(() => {
+    server.listen(port, () => {
+        console.log("%s listening at 3001"); // eslint-disable-line no-console
+    });
 });
