@@ -8,10 +8,6 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         },
-        status:{
-            type: DataTypes.STRING,
-
-        },
         payment_id: {
             type: DataTypes.STRING,
         },
