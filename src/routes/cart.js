@@ -8,6 +8,6 @@ const router = Router();
 router.post("/", postCartDetail);
 router.patch("/:id", updateCartDetail);
 router.delete("/:id", removeCartDetailController);
-router.get("/:id", getCartController);
+router.get("/", getCartController);
 
 module.exports = router;
