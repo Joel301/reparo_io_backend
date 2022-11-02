@@ -1,5 +1,6 @@
-const { Client, Cart } = require("../db");
+const { Client, Cart, Order, OrderDetail } = require("../db");
 const { isStringOk, isEmail } = require("../services/validaciones");
+const postOrderController = require("./postOrderController");
 
 //Validaciones -- Se podrian mover a un archivo aparte
 
@@ -36,7 +37,19 @@ const getClientsController = async function (req, res, next) {
 const getClientController = async function (req, res, next) {
   const { id } = req.params;
   try {
-    const client = await Client.findOne({ where: { id: id } });
+    const client = await Client.findOne({
+      where: { id: id },
+      include: [
+        { model: Cart, attributes: ["id"] },
+        {
+          model: Order,
+          include: {
+            model: OrderDetail,
+            exclude: { attributes: ["clientId"] },
+          },
+        },
+      ],
+    });
 
     if (!client) res.json("Not found");
     else res.json(client);

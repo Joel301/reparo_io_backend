@@ -5,7 +5,7 @@ const getCartController = async function (req, res, next) {
 
   try {
     const cart = await Cart.findOne({
-      where: { id: cartId },
+      where: { clientId: clientId },
       include: {
         model: CartDetail,
         attributes: { exclude: ["updatedAt"] },
