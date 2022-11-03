@@ -20,9 +20,6 @@ const getReviews = async (req, res) => {
     }
 }
 
-
-// "bd849f37-ea9e-4594-b6e0-9ec834619aa8",
-// "389cc87f-9fcb-428e-b825-a5d4a18260eb",
 const createReview = async (req, res) => {
 
     const { clientId, professionalId, comment, rating } = req.body
@@ -53,17 +50,17 @@ const createReview = async (req, res) => {
                 clientId,
                 professionalId,
             },
-            default: {
+            defaults: {
                 comment,
-                rating,
+                rating
             }
         })
+        console.log(created)
         if (!created) {
             review.comment = comment
             review.rating = rating
             await review.save()
         }
-        // Actualizar Professional promedio
 
         let reviews = await Review.findAll({
             where: {
