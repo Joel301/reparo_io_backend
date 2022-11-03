@@ -10,7 +10,7 @@ const orderRoute = require("./order");
 const cartRoute = require("./cart");
 const { route } = require("./professions");
 
-const mercadoPago = require('./mercadopago');
+const mercadoPago = require('./mercadoPago');
 
 const router = Router();
 

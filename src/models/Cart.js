@@ -9,12 +9,13 @@ module.exports = (sequelize) => {
         primaryKey: true,
         },
         amount: {
-        type: DataTypes.FLOAT,
-        defaultValue: 0.0,
-        },
-        paymentId: {
-            type: DataTypes.INTEGER
-        },
-    });
+            type: DataTypes.STRING,
+            allowNull: false,
+          },
+    },  
+    {
+        timestamps: true,
+        createdAt: false,
+      });
 };
 

@@ -26,15 +26,16 @@ const { conn } = require("./src/db.js");
 const { preloadProfs } = require("./src/utils/preLoadProfs.js");
 
 //cambiar mode para modificar modelos
-// mode = { force: true }
+mode = { force: false }
+//mode = { force: true }
 
-mode = { alter: true };
+//mode = { alter: true }; no va
 
 // Syncing all the models at once.
 conn.sync(mode).then(() => {
-    preloadProfs();
+  preloadProfs();
 }).then(() => {
-    server.listen(port, () => {
-        console.log("%s listening at 3001"); // eslint-disable-line no-console
-    });
+  server.listen(port, () => {
+    console.log("listening at %s", port); // eslint-disable-line no-console
+  });
 });
