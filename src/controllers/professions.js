@@ -15,7 +15,6 @@ const infoProfessions = async () => {
 const postProfessions = async (data) => {
   const { name } = data
   const { length } = await infoProfessions()
-  console.log(length)
   if (!name) return { error: "es necesario el nombre del profesional" }
   const [newProfessional, isnew] = await Profession.findOrCreate({
     where: { name }, defaults: {

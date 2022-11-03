@@ -5,14 +5,6 @@ const { infoProfessions, postProfessions } = require('../controllers/professions
 
 router.get('/', async (req, res, next) => {
     try {
-        //let profsDb= await infoProfessions();
-        //const filterDb= profsDb.map(p=>{
-        //        return{
-        //            id: p.id,
-        //            name: p.name
-        //        }
-        //    });
-        //res.send(filterDb);
         let profsDb = await infoProfessions();
         res.send(profsDb);
     } catch (error) {
@@ -21,9 +13,14 @@ router.get('/', async (req, res, next) => {
 });
 router.post('/', async (req, res, next) => {
     const { name } = req.body;
-    const { isnew, newProfessional } = await postProfessions({ name })
-    if (!isnew) {
-        res.send({ message: "Ya existia", newProfessional })
+    const { isnew, newProfessional, error } = await postProfessions({ name })
+    if (error) {
+        res.send({ error })
+        return
+    }
+    else if (!isnew) {
+        res.send({ message: "Ya existia", professional: newProfessional })
+        return
     } else {
         res.send(newProfessional)
     }
