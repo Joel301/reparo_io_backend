@@ -8,23 +8,14 @@ module.exports = (sequelize) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         },
-        status:{
+        amount: {
             type: DataTypes.STRING,
-
-        },
-        payment_id: {
-            type: DataTypes.STRING,
-        },
-        merchant_order_id:{
-            type: DataTypes.STRING,
-        },
-        payment_type:{
-            type: DataTypes.STRING
-        },
-        status: {
-            type: DataTypes.ENUM('pending','approved','authorized','in_proccess','in_mediation','rejected','cancelled','refunded','charged_back'),
-            defaultValue: 'pending',
-        },    
-    });
+            allowNull: false,
+          },
+    },  
+    {
+        timestamps: true,
+        createdAt: false,
+      });
 };
 
