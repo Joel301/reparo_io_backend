@@ -13,11 +13,11 @@ const updateCartDetail = async function (req, res, next) {
 
     const newDays = [...cartDetail.days];
     if (type === "remove") {
-      const filteredDays = cartDetail.days.filter((element) => {
+      const filteredDays = newDays.filter((element) => {
         return element !== day;
       });
 
-      newDays.push(...filteredDays);
+      newDays.splice(0, newDays.length, ...filteredDays);
     }
 
     if (type === "add") {
