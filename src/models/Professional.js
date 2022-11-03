@@ -54,6 +54,10 @@ module.exports = (sequelize) => {
         defaultValue:
           "https://img.icons8.com/fluency-systems-regular/96/000000/guest-male.png",
       },
+      rating: {
+        type: DataTypes.FLOAT,
+        default: 0.0
+      }
     },
     { timestamps: false }
   );
