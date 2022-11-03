@@ -1,101 +1,125 @@
 const { Review, Client, Professional } = require('../db')
 
+
+let isUUID =
+    /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/gi;
+
 const getReviews = async (req, res) => {
     try {
         const response = await Review.findAll(
-        {
-            include: [Client, Professional],
-        },
-        { raw: true }
+            {
+                include: [Client, Professional],
+            },
+            { raw: true }
         )
+        console.log(response)
         res.status(200).json(response)
     } catch (error) {
+        console.log(error)
         res.status(500).send({ msg: 'Error interno del servidor.', error })
     }
 }
 
+
+// "bd849f37-ea9e-4594-b6e0-9ec834619aa8",
+// "389cc87f-9fcb-428e-b825-a5d4a18260eb",
 const createReview = async (req, res) => {
-   
+
     const { clientId, professionalId, comment, rating } = req.body
 
+    if (clientId.search(isUUID) != 0) {
+        res.status(400).send({ msg: `uuid de clientId invalido: ${clientId}` })
+        return
+    }
+    if (professionalId.search(isUUID) != 0) {
+        res.status(400).send({ msg: `uuid de professionalId invalido: ${professionalId}` })
+        return
+    }
+
     try {
+
         const client = await Client.findByPk(clientId);
-        
-        if (!client) return res.status(400).send({ 
-            msg: `El cliente ${id} no existe en la base de datos.` 
+        if (!client) return res.status(400).send({
+            msg: `El cliente ${id} no existe en la base de datos.`
         })
 
         const professional = await Professional.findByPk(professionalId);
-        console.log(professional);
-        if (!professional) return res.status(400).send({ 
-            msg: `El professional ${id} no existe en la base de datos.` 
+        if (!professional) return res.status(400).send({
+            msg: `El professional ${professional.id} no existe en la base de datos.`
         })
 
-        // const iContract = await client.getOrders()
-        // const [orders] = iContract
-        // if (!iContract.length) return res.status(400).send({ 
-        //     msg: `No has contratado aún este professional.` 
-        // })
-
-        // const check = orders.dataValues.details.find(obj => obj.professionalId == professionalId)
-        // if (!check) return res.status(400).send({ msg: `No has contratado aún este professional.` })
-
-        const review = await Review.create({
-        clientId,
-        professionalId,
-        comment,
-        rating,
-        })
-
-    // await review.setClient(clientId)
-    // await review.setProfessional(professionalId)
-
-    let reviews = await professional.getReviews()
-    await Professional.update(
-        {
-            rating: reviews.map(e => e.rating).reduce((a, b) => a + b) / reviews.length,
-        },
-        {
-            where: { id: professionalId },
-        }
-    )
-
-    const professionalReviews = await Professional.findByPk(
-        professionalId,
-        {
-            include: [
-            {
-                model: Review,
-                include: Client,
+        const [review, created] = await Review.findOrCreate({
+            where: {
+                clientId,
+                professionalId,
             },
-            ],
-        },
-        { raw: true }
-    )
+            default: {
+                comment,
+                rating,
+            }
+        })
+        if (!created) {
+            review.comment = comment
+            review.rating = rating
+            await review.save()
+        }
+        // Actualizar Professional promedio
 
-    res.status(200).send({ msg: 'Review creada con éxito.', 
-    reviews: professionalReviews ? professionalReviews.reviews : [] })
+        let reviews = await Review.findAll({
+            where: {
+                professionalId,
+            }
+        })
+        const newRating = reviews.map(e => e.rating).reduce((a, b) => a + b) / reviews.length
+        professional.rating = parseFloat(parseFloat(newRating).toFixed(2))
+        await professional.save()
+        // await Professional.update(
+        //     {
+        //         rating: reviews.map(e => e.rating).reduce((a, b) => a + b) / reviews.length,
+        //     },
+        //     {
+        //         where: { id: professionalId },
+        //     }
+        // )
+
+        // const professionalReviews = await Professional.findByPk(
+        //     professionalId,
+        //     {
+        //         include: [
+        //             {
+        //                 model: Review,
+        //                 include: Client,
+        //             },
+        //         ],
+        //     },
+        //     { raw: true }
+        // )
+
+        res.status(200).send({
+            msg: 'Review creada con éxito.',
+            reviews//: professionalReviews ? professionalReviews.reviews : []
+        })
     } catch (error) {
         res.status(500).send({ msg: 'Error interno del servidor.', error })
     }
 }
 
-const updateReview = () => {}
+const updateReview = () => { }
 
 const getReviewsProfessional = async (req, res) => {
     const { professionalId: id } = req.params
 
     try {
         const response = await Professional.findByPk(id, {
-        include: [
-            {
-            model: Review,
-            include: Client,
-            },
-        ],
+            include: [
+                {
+                    model: Review,
+                    include: Client,
+                },
+            ],
         })
 
-    res.status(200).json(response)
+        res.status(200).json(response)
     } catch (error) {
         res.status(500).send({ msg: 'Error interno del servidor.', error })
     }
@@ -106,15 +130,15 @@ const getReviewsClient = async (req, res) => {
 
     try {
         const response = await Client.findByPk(id, {
-        include: [
-            {
-            model: Review,
-            include: Professional,
-            },
-        ],
+            include: [
+                {
+                    model: Review,
+                    include: Professional,
+                },
+            ],
         })
 
-    res.status(200).json(response)
+        res.status(200).json(response)
     } catch (error) {
         res.status(500).send({ msg: 'Error interno del servidor.', error })
     }
@@ -150,19 +174,19 @@ module.exports = {
 
 //     try {
 //         const client = await Client.findByPk(id)
-//         if (!client) return res.status(400).send({ 
-//             msg: `El cliente ${id} no existe en la base de datos.` 
+//         if (!client) return res.status(400).send({
+//             msg: `El cliente ${id} no existe en la base de datos.`
 //         })
 
 //         const professional = await Professional.findByPk(professionalId)
-//         if (!professional) return res.status(400).send({ 
-//             msg: `El professional ${id} no existe en la base de datos.` 
+//         if (!professional) return res.status(400).send({
+//             msg: `El professional ${id} no existe en la base de datos.`
 //         })
 
 //         const iContract = await client.getOrders()
 //         const [orders] = iContract
-//         if (!iContract.length) return res.status(400).send({ 
-//             msg: `No has contratado aún este professional.` 
+//         if (!iContract.length) return res.status(400).send({
+//             msg: `No has contratado aún este professional.`
 //         })
 
 //         const check = orders.dataValues.details.find(obj => obj.professionalId == professionalId)
@@ -199,7 +223,7 @@ module.exports = {
 //         { raw: true }
 //     )
 
-//     res.status(200).send({ msg: 'Review creada con éxito.', 
+//     res.status(200).send({ msg: 'Review creada con éxito.',
 //     reviews: professionalReviews ? professionalReviews.reviews : [] })
 //     } catch (error) {
 //         res.status(500).send({ msg: 'Error interno del servidor.', error })
