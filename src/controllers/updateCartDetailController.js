@@ -2,7 +2,7 @@ const { CartDetail, Professional } = require("../db");
 
 const updateCartDetail = async function (req, res, next) {
   let id = req.params.id;
-  const { day, type } = req.body;
+  const { days } = req.body;
 
   try {
     const cartDetail = await CartDetail.findOne({
@@ -11,20 +11,7 @@ const updateCartDetail = async function (req, res, next) {
 
     const prof = await cartDetail.getProfessional();
 
-    const newDays = [...cartDetail.days];
-    if (type === "remove") {
-      const filteredDays = newDays.filter((element) => {
-        return element !== day;
-      });
-
-      newDays.splice(0, newDays.length, ...filteredDays);
-    }
-
-    if (type === "add") {
-      if (!newDays.includes(day)) newDays.push(day);
-    }
-
-    let reservationAmount = totalPrice(prof.dayPrice, newDays);
+    let reservationAmount = totalPrice(prof.dayPrice, days);
 
     const cart = await cartDetail.getCart();
 
@@ -33,7 +20,7 @@ const updateCartDetail = async function (req, res, next) {
       cart.amount - cartDetail.reservationAmount + reservationAmount;
     await cart.update({ amount: newCartAmount });
 
-    await cartDetail.update({ days: newDays, reservationAmount });
+    await cartDetail.update({ days: days, reservationAmount });
     await cartDetail.reload();
 
     res.json({ cartDetail, cartAmount: newCartAmount });
