@@ -25,9 +25,10 @@ const port = process.env.PORT || 3001;
 const { conn } = require("./src/db.js");
 
 //cambiar mode para modificar modelos
-//mode = { force: false }
+mode = { force: false }
+//mode = { force: true }
 
-mode = { alter: true };
+//mode = { alter: true }; no va
 
 // Syncing all the models at once.
 conn.sync(mode).then(() => {

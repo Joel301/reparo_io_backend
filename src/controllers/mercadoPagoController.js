@@ -1,7 +1,7 @@
 const mercadopago = require('mercadopago');
 require('dotenv').config();
 const { ACCESS_TOKEN } = process.env;
-const { Cart } = require('../db');
+const { Payment } = require('../db');
 
 const createOrder = async (req, res, next) => {
     mercadopago.configure({
@@ -21,9 +21,9 @@ const createOrder = async (req, res, next) => {
         items: allOrders,
         auto_return: 'approved',
         back_urls: {
-            failure: 'http://localhost:3000/home/',
-            pending: 'http://localhost:3001/home/mercado/pending',
-            success: 'http://localhost:3001/home/mercado/success',
+            failure: 'http://localhost:3000/home/',// al FRONT
+            pending: 'http://localhost:3001/home/mercado/pending',// al BACK
+            success: 'http://localhost:3001/home/mercado/success',// al BACK
         },
         notification_url: "https://b5ea-138-186-154-240.sa.ngrok.io/home/mercado/notificar"
     };
@@ -62,7 +62,7 @@ const handleSuccess = async (req, res, next) => {
 const status = req.query;
  console.log("Success: ",status);
     try {
-        const newCart = await Cart.create({
+        const newPay = await Payment.create({
             merchant_order_id:status.merchant_order_id,
             status: status.status,
 // Estado del pago
@@ -89,7 +89,7 @@ const status = req.query;
             preference_id:status.preference_id,
         });
 
-        res.redirect(`http://localhost:3000/home/${newCart.payment_id}`);
+        res.redirect(`http://localhost:3000/home/${newPay.payment_id}`);
 
     } catch (error) {
         console.error(error);
