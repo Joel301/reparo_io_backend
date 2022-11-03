@@ -11,7 +11,7 @@ const updateCartDetail = async function (req, res, next) {
 
     const prof = await cartDetail.getProfessional();
 
-    const newDays = [];
+    const newDays = [...cartDetail.days];
     if (type === "remove") {
       const filteredDays = cartDetail.days.filter((element) => {
         return element !== day;
