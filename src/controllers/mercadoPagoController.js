@@ -25,7 +25,7 @@ const createOrder = async (req, res, next) => {
             pending: 'http://localhost:3001/home/mercado/pending',// al BACK
             success: 'http://localhost:3001/home/mercado/success',// al BACK
         },
-        notification_url: "https://b5ea-138-186-154-240.sa.ngrok.io/home/mercado/notificar"
+        notification_url: "https://74ac-138-186-154-240.sa.ngrok.io/home/mercado/notificar"
     };
 
     mercadopago.preferences.create(preference)
@@ -39,28 +39,12 @@ const createOrder = async (req, res, next) => {
 };
 
 const handlePending = async (req, res, next) => {
-
-// const status = req.query;
   console.log("Pending");
-//     try {
-//         const newCart = await Cart.create({
-//             merchant_order_id:status.merchant_order_id,
-//             status: status.status,
-//             payment_id: status.payment_id,
-//             payment_type: status.payment_type,
-//             preference_id:status.preference_id,
-//         });
-
 next();
-    // } catch (error) {
-    //     console.error(error);
-    //     next();
-    // }
 };
 const handleSuccess = async (req, res, next) => {
-
 const status = req.query;
- console.log("Success: ",status);
+ console.log("Success: ",status,req.body);
     try {
         const newPay = await Payment.create({
             merchant_order_id:status.merchant_order_id,

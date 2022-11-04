@@ -5,8 +5,8 @@ const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 const sequelize = new Sequelize(
-  //`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
-  "postgresql://postgres:R9QP0NLfu1I2XSq1w3e4@containers-us-west-66.railway.app:6000/railway", //DEVELOP
+  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/reparoio`,
+ // "postgresql://postgres:R9QP0NLfu1I2XSq1w3e4@containers-us-west-66.railway.app:6000/railway", //DEVELOP
   // "postgresql://postgres:StAexDOXnSaL6lHRmIRM@containers-us-west-94.railway.app:5680/railway", //PRODUCCION
 
   {
@@ -54,6 +54,7 @@ const {
   Review,
   Cart,
   CartDetail,
+  Payment
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -105,6 +106,12 @@ Reservation.belongsTo(OrderDetail);
 ////////////////////////////////////
 Client.hasMany(Cart);
 Cart.belongsTo(Client);
+
+Professional.hasMany(Cart);
+Cart.belongsTo(Professional);
+
+// Client.hasMany(Payment);
+// Payment.belongsTo(Client);
 
 Professional.hasMany(Cart);
 Cart.belongsTo(Professional);

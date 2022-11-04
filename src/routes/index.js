@@ -8,6 +8,7 @@ const reviewsRoute = require("./reviews");
 const clientRoute = require("./client");
 const orderRoute = require("./order");
 const cartRoute = require("./cart");
+const paymentRoute = require("./payment");
 const { route } = require("./professions");
 
 const mercadoPago = require('./mercadopago');
@@ -21,7 +22,7 @@ router.use("/reviews", reviewsRoute);
 router.use("/clients", clientRoute);
 router.use("/orders", orderRoute);
 router.use("/cart", cartRoute);
-
+router.use("/payments", paymentRoute);
 router.get("/", searchController);
 
 router.use("/mercado", mercadoPago);
