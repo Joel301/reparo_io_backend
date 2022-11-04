@@ -2,7 +2,7 @@
 
 ## Rutas API
 
-## Professions
+## Professionals
 -   ### Mostrar todo _professional_
 
 ```
@@ -92,3 +92,44 @@ Requiere:
   POST _todavia no se pasa a produccion_
 ```
 
+---
+## Professions
+
+Rutas:
+- Regresa la lista de profesiones:
+```
+  GET https://reparoiobackend-main.up.railway.app/home/professions
+```
+- Agregar Profesion:
+```
+  POST https://reparoiobackend-main.up.railway.app/home/professions
+```
+- Requiere(body):
+```
+{
+  "name":STRING
+}
+```
+-Retorna:
+```
+//Exitoso:
+{
+    "id": INTEGER, //El nuevo id assignado
+    "name": STRING
+}
+
+//nombre ya existe:
+{
+    "message": "Ya existia",
+    "professional": {
+        "id": INTEGER, // id en el que esta guardado
+        "name": STRING
+    }
+}
+
+// no se envio el formato correcto:
+{
+    "error": "es necesario el nombre del profesional"
+}
+
+```
