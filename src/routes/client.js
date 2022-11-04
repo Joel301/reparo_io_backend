@@ -10,8 +10,8 @@ const { getClientsController,
 
 router.get("/", getClientsController)
 router.get("/:id", getClientController)
-router.put("/delete/:id", delClientController)
-router.put("/update/:id", updateClientController)
+router.delete("/:id", delClientController)
+router.put("/:id", updateClientController)
 router.post("/", postClientController)
    
 module.exports = router;
