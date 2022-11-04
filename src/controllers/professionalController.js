@@ -69,6 +69,7 @@ const getProfessioanlById = async (req, res, next) => {
         reputation: profesionalId.reputation
           ? profesionalId.reputation
           : "not available yet",
+          availableDays: profesionalId.availableDays,
         //  stock,
         professions: profes,
       };
