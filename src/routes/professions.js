@@ -1,5 +1,6 @@
 const { Router } = require('express')
-const router = Router()
+const router = Router();
+const { Professional, Profession } = require("../db.js");
 const { infoProfessions, postProfessions } = require('../controllers/professions')
 
 
@@ -24,6 +25,25 @@ router.post('/', async (req, res, next) => {
     } else {
         res.send(newProfessional)
     }
-})
+});
+router.delete("/:id", async (req, res, next)=>{
+    const { id } = req.params;
+    try {
+        const profDelete = await Profession.findByPk(id, {
+          include: {
+            model: Professional,
+            through: {
+              attributes: [],
+            },
+          },
+        });
+        if (profDelete) {
+          profDelete.destroy();
+          res.json({ profDelete, message: "..Profession deleted!" });
+        } else res.send({ message: "profession not found" });
+      } catch (error) {
+        next(error);
+      }
+});
 
 module.exports = router;
