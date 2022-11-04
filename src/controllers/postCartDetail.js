@@ -11,6 +11,7 @@ const postCartDetail = async function (req, res, next) {
 
     const cart = await Cart.findOne({
       where: { clientId: clientId },
+      include: CartDetail,
     });
 
     //Creando el nuevo item que va dentro del carrito
@@ -29,7 +30,13 @@ const postCartDetail = async function (req, res, next) {
     await cart.addCartDetail(newCartDetail);
 
     //Recalculando total del carrito
-    let newCartAmount = cart.amount + reservationAmount;
+    await cart.reload();
+
+    const cartAmount = cart.cartDetails.map((element) => {
+      return element.reservationAmount;
+    });
+
+    let newCartAmount = cartAmount.reduce((prev, next) => prev + next);
 
     await cart.update({ amount: newCartAmount });
 

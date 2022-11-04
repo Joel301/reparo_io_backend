@@ -29,10 +29,15 @@ const updateCartDetail = async function (req, res, next) {
     const cart = await cartDetail.getCart();
 
     //Actualizando amount del carrito
-    let newCartAmount =
-      cart.amount - cartDetail.reservationAmount + reservationAmount;
-    await cart.update({ amount: newCartAmount });
+    const cartDetails = await cart.getCartDetails();
 
+    const cartAmount = cartDetails.map((element) => {
+      return element.reservationAmount;
+    });
+    let newCartAmount = cartAmount.reduce((prev, next) => prev + next);
+
+    //Actualizando valores
+    await cart.update({ amount: newCartAmount });
     await cartDetail.update({ days: newDays, reservationAmount });
     await cartDetail.reload();
 
