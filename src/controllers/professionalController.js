@@ -53,9 +53,9 @@ const getProfessioanlById = async (req, res, next) => {
 
       //const stock = profesionalId.availableDays.filter((day) => {
       //  return allReservations.forEach((element) => {
-       //   if (element.days.includes(day)) return false;
+      //   if (element.days.includes(day)) return false;
       //  });
-     // });
+      // });
 
       const prof = {
         id: profesionalId.id,
@@ -65,10 +65,12 @@ const getProfessioanlById = async (req, res, next) => {
         phoneNumber: profesionalId.phoneNumber,
         address: profesionalId.address,
         email: profesionalId.email,
+        rating: profesionalId.rating,
         reputation: profesionalId.reputation
           ? profesionalId.reputation
           : "not available yet",
-      //  stock,
+          availableDays: profesionalId.availableDays,
+        //  stock,
         professions: profes,
       };
       res.json(prof);
