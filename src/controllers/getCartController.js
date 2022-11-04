@@ -1,7 +1,7 @@
 const { Cart, CartDetail } = require("../db");
 
 const getCartController = async function (req, res, next) {
-  let cartId = req.params.id;
+  let clientId = req.params.id;
 
   try {
     const cart = await Cart.findOne({
