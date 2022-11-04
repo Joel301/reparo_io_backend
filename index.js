@@ -29,7 +29,7 @@ const { preloadProfs } = require("./src/utils/preLoadProfs.js");
 mode = { force: false }
 //mode = { force: true }
 
-// const mode = { alter: true };
+// mode = { alter: true };
 
 // Syncing all the models at once.
 conn.sync(mode).then(() => {
