@@ -16,7 +16,7 @@ const postClientController = async (req, res, next) => {
     //Creando carrito a nuevo usuario
     await Cart.create({
       clientId: newClient.id,
-      amount: "",
+      amount: 0.0,
     });
 
     return res.json({ newClient, message: "user created" });

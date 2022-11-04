@@ -1,4 +1,4 @@
-const { Professional, Profession, Reservation } = require("../db.js");
+const { Professional, Profession, Review } = require("../db.js");
 const { Op } = require("sequelize");
 const postProfessionalService = require("../services/postProfessionalService.js");
 const getAllProfessionalService = require("../services/getAllProfessionalService.js");
@@ -173,6 +173,7 @@ const delProfesional = async (req, res, next) => {
       },
     });
     if (profDelete) {
+      //profDelete.destroy({where:{include:{model: Review}}});
       profDelete.update({...profDelete, enabled:false});
       res.json({ profDelete, message: "..Professional deleted!" });
     } else res.send({ message: "professional not found" });
