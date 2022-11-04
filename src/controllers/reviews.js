@@ -103,6 +103,39 @@ const createReview = async (req, res) => {
 
 const updateReview = () => { }
 
+const deleteReview = async (req, res,next) => {
+    const {clientId, professionalId} = req.body;
+    try {
+        const review = await Review.findOne(
+            {
+                where: 
+                {
+                    clientId: clientId,
+                    professionalId:professionalId
+                }
+            }
+            );
+            if (review) {
+                console.log("Encontre el review",review);
+                review.destroy();
+            //     await Review.destroy( {
+            //         where: {
+            //         clientId: clientId,
+            //         professionalId: professionalId,
+            //     },
+            // });
+            res.json({ message: "..review deleted!" });
+            }
+            else{
+                console.log("NO lo encontre el review");
+                res.json({ message: "..can't be deleted!" });
+            } 
+    }
+    catch (error) {
+        next(error);
+      }
+};
+
 const getReviewsProfessional = async (req, res) => {
     const { professionalId: id } = req.params
 
@@ -145,6 +178,7 @@ module.exports = {
     getReviews,
     createReview,
     updateReview,
+    deleteReview,
     getReviewsProfessional,
     getReviewsClient,
 }

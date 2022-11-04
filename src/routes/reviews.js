@@ -4,7 +4,8 @@ const {
     getReviewsProfessional, 
     getReviewsClient, 
     createReview, 
-    updateReview 
+    updateReview,
+    deleteReview
 } = require('../controllers/reviews')
 
 const router = Router();
@@ -14,6 +15,7 @@ router.get('/', getReviews)
 // router.get('/reviewsClient/:clientId', getReviewsClient)
 //
 router.post('/', createReview);
+router.delete('/',deleteReview);//pasar por body clientId, professionalId
 // router.put('/:reviewId', updateReview);
 
 module.exports =  router;
