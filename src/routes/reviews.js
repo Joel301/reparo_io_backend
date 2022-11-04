@@ -16,26 +16,6 @@ router.get('/', getReviews)
 //
 router.post('/', createReview);
 router.delete('/',deleteReview);//pasar por body clientId, professionalId
-// router.put('/:reviewId', updateReview);
+router.put('/', updateReview);//pasar por body clientId, professionalId
 
 module.exports =  router;
-
-
-
-// const { 
-//         getReviews, 
-//         getReviewsProfessional, 
-//         getReviewsClient, 
-//         createReview, 
-//         updateReview 
-//     } = require('../controllers/reviews')
-
-
-// routes.get('/reviews', getReviews)
-// routes.get('/reviewsProfessional/:professionalId', getReviewsProfessional)
-// routes.get('/reviewsClient/:clientId', getReviewsClient)
-// //Cient
-// routes.post('/reviews/:clientId', createReview)
-// routes.put('/reviews/:reviewId', updateReview)
-
-// module.exports = { routes }

@@ -101,7 +101,52 @@ const createReview = async (req, res) => {
     }
 }
 
-const updateReview = () => { }
+const updateReview = async (req, res) => {
+    const { clientId, professionalId, comment, rating } = req.body
+
+    if (clientId.search(isUUID) != 0) {
+        res.status(400).send({ msg: `uuid de clientId invalido: ${clientId}` })
+        return
+    }
+    if (professionalId.search(isUUID) != 0) {
+        res.status(400).send({ msg: `uuid de professionalId invalido: ${professionalId}` })
+        return
+    }
+    const professional = await Professional.findByPk(professionalId);
+    if (!professional) return res.status(400).send({
+        msg: `El professional ${professional.id} no existe en la base de datos.`
+    });
+    try {
+            const review = await Review.findOne(
+                {
+                    where: 
+                    {
+                        clientId: clientId,
+                        professionalId:professionalId
+                    }
+                }
+                );
+        if (review) {
+            review.comment = comment;
+            review.rating = rating;
+            await review.save();
+            res.json({ review, message: "review updated" });
+            let reviews = await Review.findAll({
+                where: {
+                    professionalId,
+                }
+            })
+            const newRating = reviews.map(e => e.rating).reduce((a, b) => a + b) / reviews.length
+            professional.rating = parseFloat(parseFloat(newRating).toFixed(2));
+            console.log(professional.rating);
+            await professional.save();
+        }
+    } catch (error) {
+        res.status(500).send({ msg: 'Error actualizando review.', error })
+    }
+
+
+ }
 
 const deleteReview = async (req, res,next) => {
     const {clientId, professionalId} = req.body;
@@ -118,12 +163,6 @@ const deleteReview = async (req, res,next) => {
             if (review) {
                 console.log("Encontre el review",review);
                 review.destroy();
-            //     await Review.destroy( {
-            //         where: {
-            //         clientId: clientId,
-            //         professionalId: professionalId,
-            //     },
-            // });
             res.json({ message: "..review deleted!" });
             }
             else{
