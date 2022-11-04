@@ -5,14 +5,19 @@ let isUUID =
     /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/gi;
 
 const getReviews = async (req, res) => {
+    const {clientId,professionalId} = req.body;
+    let where = {};
+    if (clientId)where = {...where, clientId: clientId }
+    if (professionalId) where = {...where, professionalId: professionalId }
+    console.log(where);
     try {
         const response = await Review.findAll(
             {
+                where: where,
                 include: [Client, Professional],
             },
             { raw: true }
-        )
-        console.log(response)
+        );
         res.status(200).json(response)
     } catch (error) {
         console.log(error)
