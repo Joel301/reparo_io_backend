@@ -116,9 +116,9 @@ const postAProfesional = async (req, res, next) => {
 
     const newProfessional = await postProfessionalService(req.body);
 
-    res.json({ newProfessional, message: "profesional creado" });
+    res.json({ newProfessional, message: "professional created" });
   } catch (e) {
-    e.message = "error creando profesional";
+    e.message = "error to create professional";
     next(e);
   }
 };
@@ -173,7 +173,7 @@ const delProfesional = async (req, res, next) => {
       },
     });
     if (profDelete) {
-      await profDelete.destroy();
+      profDelete.update({...profDelete, enabled:false});
       res.json({ profDelete, message: "..Professional deleted!" });
     } else res.send({ message: "professional not found" });
   } catch (error) {
