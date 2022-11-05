@@ -1,6 +1,6 @@
 const mercadopago = require('mercadopago');
 require('dotenv').config();
-const { ACCESS_TOKEN } = process.env;
+const { ACCESS_TOKEN,URL ,URL_FRONT} = process.env;
 const { Payment } = require('../db');
 
 const createOrder = async (req, res, next) => {
@@ -21,11 +21,11 @@ const createOrder = async (req, res, next) => {
         items: allOrders,
         auto_return: 'approved',
         back_urls: {
-            failure: 'http://localhost:3000/home/',// al FRONT
-            pending: 'http://localhost:3001/home/mercado/pending',// al BACK
-            success: 'http://localhost:3001/home/mercado/success',// al BACK
+            failure: URL_FRONT,// al FRONT
+            pending: `${URL}/home/mercado/pending`,// al BACK
+            success: `${URL}/home/mercado/success`,// al BACK
         },
-        notification_url: "https://b5ea-138-186-154-240.sa.ngrok.io/home/mercado/notificar"
+        notification_url: `${URL}/home/mercado/notificar`
     };
 
     mercadopago.preferences.create(preference)
@@ -89,7 +89,7 @@ const status = req.query;
             preference_id:status.preference_id,
         });
 
-        res.redirect(`http://localhost:3000/home/${newPay.payment_id}`);
+        res.redirect(`${URL_HOME}cart/${newPay.payment_id}`);
 
     } catch (error) {
         console.error(error);
