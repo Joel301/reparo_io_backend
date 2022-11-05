@@ -89,7 +89,7 @@ const status = req.query;
             preference_id:status.preference_id,
         });
 
-        res.redirect(`${URL_FRONT}/cart/${newPay.payment_id}`);
+        res.redirect(`http://localhost:3000/cart/${newPay.payment_id}`);
 
     } catch (error) {
         console.error(error);
