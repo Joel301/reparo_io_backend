@@ -25,6 +25,7 @@ const updateCartDetail = async function (req, res, next) {
     }
 
     let reservationAmount = totalPrice(prof.dayPrice, newDays);
+    await cartDetail.update({ days: newDays, reservationAmount });
 
     const cart = await cartDetail.getCart();
 
@@ -38,7 +39,7 @@ const updateCartDetail = async function (req, res, next) {
 
     //Actualizando valores
     await cart.update({ amount: newCartAmount });
-    await cartDetail.update({ days: newDays, reservationAmount });
+
     await cartDetail.reload();
 
     res.json({ cartDetail, cartAmount: newCartAmount });
