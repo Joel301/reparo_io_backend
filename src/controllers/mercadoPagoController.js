@@ -1,6 +1,6 @@
 const mercadopago = require('mercadopago');
 require('dotenv').config();
-const { ACCESS_TOKEN,URL ,URL_FRONT} = process.env;
+const { ACCESS_TOKEN, URL ,URL_FRONT} = process.env;
 const { Payment } = require('../db');
 
 const createOrder = async (req, res, next) => {
@@ -60,7 +60,7 @@ next();
 const handleSuccess = async (req, res, next) => {
 
 const status = req.query;
- console.log("Success: ",status);
+ console.log("PASA POR ACA: ",status);
     try {
         const newPay = await Payment.create({
             merchant_order_id:status.merchant_order_id,
@@ -89,7 +89,7 @@ const status = req.query;
             preference_id:status.preference_id,
         });
 
-        res.redirect(`${URL_FRONT}cart/${newPay.payment_id}`);
+        res.redirect(`${URL_FRONT}/cart/${newPay.payment_id}`);
 
     } catch (error) {
         console.error(error);
