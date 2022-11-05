@@ -22,10 +22,10 @@ const createOrder = async (req, res, next) => {
         auto_return: 'approved',
         back_urls: {
             failure: URL_FRONT,// al FRONT
-            pending: `${URL}/home/mercado/pending`,// al BACK
-            success: `${URL}/home/mercado/success`,// al BACK
+            pending: `${URL}home/mercado/pending`,// al BACK
+            success: `${URL}home/mercado/success`,// al BACK
         },
-        notification_url: `${URL}/home/mercado/notificar`
+        notification_url: `${URL}home/mercado/notificar`
     };
 
     mercadopago.preferences.create(preference)
@@ -89,7 +89,7 @@ const status = req.query;
             preference_id:status.preference_id,
         });
 
-        res.redirect(`${URL_HOME}cart/${newPay.payment_id}`);
+        res.redirect(`${URL_FRONT}cart/${newPay.payment_id}`);
 
     } catch (error) {
         console.error(error);
