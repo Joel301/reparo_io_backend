@@ -2,6 +2,11 @@ const mercadopago = require("mercadopago");
 require("dotenv").config();
 const { ACCESS_TOKEN, URL, URL_FRONT } = process.env;
 const { Payment } = require("../db");
+const {
+  sendServiceNotification,
+  sendOrderNotification,
+} = require("../services/emailService");
+
 
 const createOrder = async (req, res, next) => {
   mercadopago.configure({
@@ -14,6 +19,7 @@ const createOrder = async (req, res, next) => {
   }
 
   //Orden de compra, obj preferencia
+
   const allOrders = req.body.items.map((item) => ({
     title: `Servicio de compra ID ${item.title}`,
     unit_price: item.price,
@@ -29,6 +35,7 @@ const createOrder = async (req, res, next) => {
       success: `${URL}/home/mercado/success`, // al BACK
     },
     notification_url: `${URL}/home/mercado/notificar`,
+
   };
 
   mercadopago.preferences
@@ -92,6 +99,7 @@ const handleSuccess = async (req, res, next) => {
       preference_id: status.preference_id,
     });
 
+    await sendOrderNotification(req.body.clientId, req.body.orderId);
     res.redirect(`${URL_HOME}cart/${newPay.payment_id}`);
   } catch (error) {
     console.error(error);
