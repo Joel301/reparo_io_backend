@@ -1,24 +1,22 @@
 const { Router } = require("express");
 const { 
-    getReviews, 
+    getReviews,
     getReviewsProfessional, 
-    getReviewsClient, 
+    getReviewsClient,
     createReview, 
-    updateReview 
+    updateReview,
+    deleteReview
 } = require('../controllers/reviews')
-
 const router = Router();
-
-router.get('/', getReviews)
-// router.get('/reviewsProfessional/:professionalId', getReviewsProfessional)
-// router.get('/reviewsClient/:clientId', getReviewsClient)
-//
+router.get('/', getReviews); // Sin body trae todo, 
+                            //con clientId en body todos los review de clientId
+                            //con professionalId en body todos los review de professionalId
+                            //con clientId y professionalId en body todos los review de clientId-professionalID
 router.post('/', createReview);
-// router.put('/:reviewId', updateReview);
+router.delete('/',deleteReview);//pasar por body clientId, professionalId
+router.put('/', updateReview);//pasar por body clientId, professionalId
 
 module.exports =  router;
-
-
 
 // const { 
 //         getReviews, 
