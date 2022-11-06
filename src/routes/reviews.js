@@ -5,7 +5,6 @@ const {
     updateReview,
     deleteReview
 } = require('../controllers/reviews')
-
 const router = Router();
 
 router.get('/', getReviews); // Sin body trae todo, 

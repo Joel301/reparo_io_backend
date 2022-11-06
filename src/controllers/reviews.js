@@ -105,6 +105,9 @@ const createReview = async (req, res) => {
         res.status(500).send({ msg: 'Error interno del servidor.', error })
     }
 }
+const updateReview = async (req, res) => {
+    const { clientId, professionalId, comment, rating } = req.body
+
 
 const updateReview = async (req, res) => {
     const { clientId, professionalId, comment, rating } = req.body
@@ -150,8 +153,7 @@ const updateReview = async (req, res) => {
         res.status(500).send({ msg: 'Error actualizando review.', error })
     }
 
-
- }
+}
 
 const deleteReview = async (req, res,next) => {
     const {clientId, professionalId} = req.body;

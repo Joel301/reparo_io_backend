@@ -29,6 +29,7 @@ server.use((req, res, next) => {
 server.use("/home", routes); //HOME NO ES UN NOMBRE APROPIADO, API ES EL CORRECTO PARA BACKENDS. NO BORRAR ESTO O ROMPERAR EL FRONT
 server.use("/api", routes); //NO BORRAR ESTA LINEA, NO AFECTA EL CODIGO DE NINGUNA MANERA Y ROMPERA COSAS EN EL FRONT
 
+
 server.use("/", (req, res) => {
   res.send("itworked ON DEVELOP");
 });

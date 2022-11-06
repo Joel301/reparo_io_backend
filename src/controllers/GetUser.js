@@ -33,4 +33,5 @@ async function getUserByEmail(email) {
         console.log(error)
     }
 }
+
 module.exports = {getUserById,getUserByEmail}

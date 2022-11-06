@@ -1,30 +1,37 @@
+
 const { Router } = require('express')
 const router = Router();
 const { Professional, Profession } = require("../db.js");
 const { infoProfessions, postProfessions } = require('../controllers/professions')
 
 
-router.get('/', async (req, res, next) => {
-    try {
-        let profsDb = await infoProfessions();
-        res.send(profsDb);
-    } catch (error) {
-        next(error)
-    }
+
+router.get("/", async (req, res, next) => {
+  try {
+    let profsDb = await infoProfessions();
+    res.send(profsDb);
+  } catch (error) {
+    next(error);
+  }
 });
-router.post('/', async (req, res, next) => {
-    const { name } = req.body;
-    const { isnew, newProfessional, error } = await postProfessions({ name })
+router.post("/", async (req, res, next) => {
+  const { name } = req.body;
+  try {
+    const { isnew, newProfessional, error } = await postProfessions({ name });
     if (error) {
-        res.send({ error })
-        return
-    }
-    else if (!isnew) {
-        res.send({ message: "Ya existia", professional: newProfessional })
-        return
+      res.send({ error });
+      return;
+    } else if (!isnew) {
+      res.send({ message: "Ya existia", professional: newProfessional });
+      return;
     } else {
-        res.send(newProfessional)
+      res.send(newProfessional);
     }
+
+  } catch (error) {
+    next(error);
+  }
+
 });
 router.delete("/:id", async (req, res, next)=>{
     const { id } = req.params;
