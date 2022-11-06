@@ -30,5 +30,24 @@ router.post("/", async (req, res, next) => {
     next(error);
   }
 });
+router.delete("/:id", async (req, res, next)=>{
+    const { id } = req.params;
+    try {
+        const profDelete = await Profession.findByPk(id, {
+          include: {
+            model: Professional,
+            through: {
+              attributes: [],
+            },
+          },
+        });
+        if (profDelete) {
+          profDelete.destroy();
+          res.json({ profDelete, message: "..Profession deleted!" });
+        } else res.send({ message: "profession not found" });
+      } catch (error) {
+        next(error);
+      }
+});
 
 module.exports = router;
