@@ -7,6 +7,7 @@ const {
   sendOrderNotification,
 } = require("../services/emailService");
 
+
 const createOrder = async (req, res, next) => {
   mercadopago.configure({
     access_token: ACCESS_TOKEN,
@@ -18,8 +19,9 @@ const createOrder = async (req, res, next) => {
   }
 
   //Orden de compra, obj preferencia
-  const allOrders = req.body.map((item) => ({
-    title: item.title,
+
+  const allOrders = req.body.items.map((item) => ({
+    title: `Servicio de compra ID ${item.title}`,
     unit_price: item.price,
     quantity: item.quantity,
   }));
@@ -29,10 +31,11 @@ const createOrder = async (req, res, next) => {
     auto_return: "approved",
     back_urls: {
       failure: URL_FRONT, // al FRONT
-      pending: `${URL}home/mercado/pending`, // al BACK
-      success: `${URL}home/mercado/success`, // al BACK
+      pending: `${URL}/home/mercado/pending`, // al BACK
+      success: `${URL}/home/mercado/success`, // al BACK
     },
-    notification_url: `${URL}home/mercado/notificar`,
+    notification_url: `${URL}/home/mercado/notificar`,
+
   };
 
   mercadopago.preferences
@@ -66,9 +69,10 @@ const handlePending = async (req, res, next) => {
 };
 const handleSuccess = async (req, res, next) => {
   const status = req.query;
-  console.log("PASA POR ACA: ", status);
+  console.log("Success: ", status);
   try {
     const newPay = await Payment.create({
+      clientId: req.body.clientId,
       merchant_order_id: status.merchant_order_id,
       status: status.status,
       // Estado del pago
@@ -96,8 +100,7 @@ const handleSuccess = async (req, res, next) => {
     });
 
     await sendOrderNotification(req.body.clientId, req.body.orderId);
-
-    res.redirect(`http://localhost:3000/cart/${newPay.payment_id}`);
+    res.redirect(`${URL_HOME}cart/${newPay.payment_id}`);
   } catch (error) {
     console.error(error);
     next();
