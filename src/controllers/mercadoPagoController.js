@@ -15,7 +15,7 @@ const createOrder = async (req, res, next) => {
 
   //Orden de compra, obj preferencia
   const allOrders = req.body.items.map((item) => ({
-    title: item.title,
+    title: `Servicio de compra ID ${item.title}`,
     unit_price: item.price,
     quantity: item.quantity,
   }));
