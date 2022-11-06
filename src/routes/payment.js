@@ -1,4 +1,5 @@
 
+
 const { Router } = require("express");
 const router = Router();
 const { getPayments}
@@ -8,3 +9,4 @@ router.get("/", getPayments);
    
 module.exports = router;
   
+

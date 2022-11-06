@@ -5,7 +5,7 @@ const postOrderController = require("./postOrderController");
 //Validaciones -- Se podrian mover a un archivo aparte
 
 const postClientController = async (req, res, next) => {
-  const { firstName, lastName, address, email } = req.body;
+  const { firstName, lastName, address, email} = req.body;
 
   try {
     isStringOk([firstName, lastName, address]);
@@ -16,9 +16,10 @@ const postClientController = async (req, res, next) => {
     //Creando carrito a nuevo usuario
     await Cart.create({
       clientId: newClient.id,
+      amount: 0.0,
     });
 
-    res.json({ newClient, message: "usuario creado" });
+    return res.json({ newClient, message: "user created" });
   } catch (e) {
     next(e);
   }
@@ -57,8 +58,37 @@ const getClientController = async function (req, res, next) {
     next(error);
   }
 };
+const delClientController = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const clientDelete = await Client.findByPk(id);
+    if (clientDelete) {
+      clientDelete.update({...clientDelete, enabled:false});
+      res.json({ clientDelete, message: "..Client deleted!" });
+    } else res.send({ message: "client not found" });
+  } catch (error) {
+    next(error);
+  }
+};
+const updateClientController = async (req, res,next) =>{
+  const {id} = req.params;
+  const { firstName, lastName, address, email } = req.body;
+
+  try {
+    isStringOk([firstName, lastName, address]);
+    isEmail(email);
+    const updClient = await Client.findByPk(id);
+    updClient.update(req.body);
+
+    return res.json({ updClient, message: "user updated" });
+  } catch (e) {
+    next(e);
+  }
+}
 module.exports = {
   getClientController,
   getClientsController,
   postClientController,
+  delClientController,
+  updateClientController,
 };

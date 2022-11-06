@@ -21,7 +21,9 @@ router.use("/user", User);
 router.use("/reviews", reviewsRoute);
 router.use("/clients", clientRoute);
 router.use("/orders", orderRoute);
-router.use("/payments", paymentRoute);  
+
+router.use("/payments", paymentRoute);
+
 router.use("/cart", cartRoute);
 
 router.get("/", searchController);

@@ -57,7 +57,11 @@ module.exports = (sequelize) => {
       rating: {
         type: DataTypes.FLOAT,
         default: 0.0
-      }
+      },
+      enabled: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
     },
     { timestamps: false }
   );

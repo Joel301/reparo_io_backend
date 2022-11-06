@@ -108,6 +108,10 @@ const createReview = async (req, res) => {
 const updateReview = async (req, res) => {
     const { clientId, professionalId, comment, rating } = req.body
 
+
+const updateReview = async (req, res) => {
+    const { clientId, professionalId, comment, rating } = req.body
+
     if (clientId.search(isUUID) != 0) {
         res.status(400).send({ msg: `uuid de clientId invalido: ${clientId}` })
         return
@@ -148,7 +152,9 @@ const updateReview = async (req, res) => {
     } catch (error) {
         res.status(500).send({ msg: 'Error actualizando review.', error })
     }
+
 }
+
 const deleteReview = async (req, res,next) => {
     const {clientId, professionalId} = req.body;
     try {
@@ -175,6 +181,7 @@ const deleteReview = async (req, res,next) => {
         next(error);
       }
 };
+
 const getReviewsProfessional = async (req, res) => {
     const { professionalId: id } = req.params
 

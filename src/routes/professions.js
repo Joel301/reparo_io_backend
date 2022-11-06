@@ -1,9 +1,10 @@
-const { Router } = require("express");
+
+const { Router } = require('express')
 const router = Router();
-const {
-  infoProfessions,
-  postProfessions,
-} = require("../controllers/professions");
+const { Professional, Profession } = require("../db.js");
+const { infoProfessions, postProfessions } = require('../controllers/professions')
+
+
 
 router.get("/", async (req, res, next) => {
   try {
@@ -26,9 +27,11 @@ router.post("/", async (req, res, next) => {
     } else {
       res.send(newProfessional);
     }
+
   } catch (error) {
     next(error);
   }
+
 });
 router.delete("/:id", async (req, res, next)=>{
     const { id } = req.params;
