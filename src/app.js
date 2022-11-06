@@ -25,12 +25,14 @@ server.use((req, res, next) => {
   );
   next();
 });
-
 server.use("/home", routes);
-// server.use("/professionals", profe);
-server.use("/api", routes);
+
 server.use("/", (req, res) => {
   res.send("itworked ON DEVELOP");
+});
+server.use((req, res, next) => {
+  console.log(req.cookies);
+  next();
 });
 
 // Error catching endware.
