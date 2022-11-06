@@ -92,7 +92,7 @@ const handleSuccess = async (req, res, next) => {
       preference_id: status.preference_id,
     });
 
-    res.redirect(`${URL_HOME}cart/${newPay.payment_id}`);
+    res.redirect(`${URL_FRONT}/cart/${newPay.payment_id}`);
   } catch (error) {
     console.error(error);
     next();
