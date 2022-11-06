@@ -54,6 +54,7 @@ const {
   Review,
   Cart,
   CartDetail,
+  Payment,
 } = sequelize.models;
 
 // Aca vendrian las relaciones
@@ -108,6 +109,10 @@ Cart.belongsTo(Client);
 
 Professional.hasMany(Cart);
 Cart.belongsTo(Professional);
+
+//PAGO
+Client.hasMany(Payment);
+Payment.belongsTo(Client);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
