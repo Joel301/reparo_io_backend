@@ -110,6 +110,10 @@ Cart.belongsTo(Client);
 Professional.hasMany(Cart);
 Cart.belongsTo(Professional);
 
+//ORDER
+Order.hasOne(Payment);
+Payment.belongsTo(Order);
+
 //PAGO
 Client.hasMany(Payment);
 Payment.belongsTo(Client);
