@@ -6,6 +6,16 @@ const jwt = require("jsonwebtoken");
 
 const TOKEN_KEY = "escualquiera";
 
+const isAuthenticated = (req, res, next) => {
+  const { userId } = req.cookies;
+  if (userId) return res.send('Is Logged')
+  next();
+}
+const isNotAuthenticated = (req, res, next) => {
+  const { userId } = req.cookies;
+  if (!userId) return res.send('Is Not Logged')
+  next();
+}
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -36,7 +46,7 @@ router.get("/", (req, res, next) => {
     res.send("la pifiaste con la consulta");
   }
 });
-router.post("/login", async (req, res, next) => {
+router.post("/login", isAuthenticated, async (req, res, next) => {
   let data = null;
   const { email, password } = req.body;
 
@@ -46,7 +56,6 @@ router.post("/login", async (req, res, next) => {
 
       if (user.isClient) {
         console.log("cliente");
-
         if (user.isClient.password === password) {
           console.log("password cliente correcto");
           data = user.isClient;
@@ -94,11 +103,11 @@ router.get("/login", (req, res, next) => {
     });
   } else res.send("NO LOGIN");
 });
-router.post("/logout", (req, res) => {
+router.post("/logout", isNotAuthenticated, (req, res) => {
   res.clearCookie("userId");
   return res.send("Logout");
 });
-router.post("/register", (req, res, next) => {
+router.post("/register", isAuthenticated, (req, res, next) => {
   const { body } = req;
   PostUser(body).then((r) => {
     console.log(r);
