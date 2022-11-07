@@ -34,6 +34,10 @@ const createOrder = async (req, res, next) => {
       success: `${URL}/home/mercado/success`, // al BACK
     },
     notification_url: `${URL}/home/mercado/notificar`,
+    external_reference: {
+      clientId,
+      orderId,
+    },
   };
 
   mercadopago.preferences
@@ -67,7 +71,7 @@ const handlePending = async (req, res, next) => {
 };
 const handleSuccess = async (req, res, next) => {
   const status = req.query;
-
+  const { clientId, orderId } = status.external_reference;
   console.log("Success: ", status);
   try {
     console.log("clientId: ", clientId);
