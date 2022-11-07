@@ -20,11 +20,7 @@ module.exports = (sequelize) => {
         },
         payment_type:{
             type: DataTypes.STRING
-        },
-        status: {
-            type: DataTypes.ENUM('pending','approved','authorized','in_proccess','in_mediation','rejected','cancelled','refunded','charged_back'),
-            defaultValue: 'pending',
-        },    
+        },  
     });
 };
 
