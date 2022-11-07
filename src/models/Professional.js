@@ -43,11 +43,11 @@ module.exports = (sequelize) => {
       },
       dayPrice: {
         type: DataTypes.FLOAT,
-        defaultValue: 0.0,
+        defaultValue: 22.0,
       },
       availableDays: {
         type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: [],
+        defaultValue: ["lunes", "martes"],
       },
       profileImg: {
         type: DataTypes.TEXT,
@@ -56,7 +56,7 @@ module.exports = (sequelize) => {
       },
       rating: {
         type: DataTypes.FLOAT,
-        default: 0.0
+        default: 0.0,
       },
       enabled: {
         type: DataTypes.BOOLEAN,
