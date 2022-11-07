@@ -8,6 +8,7 @@ const {
 } = require("../services/emailService");
 
 const createOrder = async (req, res, next) => {
+  const { clientId, orderId } = req.body;
   mercadopago.configure({
     access_token: ACCESS_TOKEN,
   });
@@ -69,9 +70,9 @@ const handleSuccess = async (req, res, next) => {
 
   console.log("Success: ", status);
   try {
-    await sendOrderNotification(req.body.clientId, req.body.orderId);
+    await sendOrderNotification(clientId, orderId);
     const newPay = await Payment.create({
-      clientId: req.body.clientId,
+      clientId,
       merchant_order_id: status.merchant_order_id,
       status: status.status,
       // Estado del pago
