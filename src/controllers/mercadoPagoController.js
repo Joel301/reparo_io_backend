@@ -70,6 +70,8 @@ const handleSuccess = async (req, res, next) => {
 
   console.log("Success: ", status);
   try {
+    console.log("clientId: ", clientId);
+    console.log("orderId: ", orderId);
     await sendOrderNotification(clientId, orderId);
     const newPay = await Payment.create({
       clientId,
