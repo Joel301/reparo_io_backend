@@ -43,10 +43,14 @@ router.post("/login", async (req, res, next) => {
   try {
     if (email && password) {
       const user = await getUserByEmail(email);
+
+      if (user.isClient) {
+        console.log("cliente");
         if (user.isClient.password === password) {
           console.log("password cliente correcto");
           data = user.isClient;
         }
+      }
       if (user.isProfessional) {
         console.log("professional");
         if (user.isProfessional.password === password) {
