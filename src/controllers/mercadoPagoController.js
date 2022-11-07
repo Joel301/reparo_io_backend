@@ -34,10 +34,6 @@ const createOrder = async (req, res, next) => {
       success: `${URL}/home/mercado/success`, // al BACK
     },
     notification_url: `${URL}/home/mercado/notificar`,
-    external_reference: {
-      clientId,
-      orderId,
-    },
   };
 
   mercadopago.preferences
