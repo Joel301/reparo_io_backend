@@ -108,10 +108,6 @@ const createReview = async (req, res) => {
 const updateReview = async (req, res) => {
     const { clientId, professionalId, comment, rating } = req.body
 
-
-const updateReview = async (req, res) => {
-    const { clientId, professionalId, comment, rating } = req.body
-
     if (clientId.search(isUUID) != 0) {
         res.status(400).send({ msg: `uuid de clientId invalido: ${clientId}` })
         return
