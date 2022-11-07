@@ -7,7 +7,6 @@ const {
   sendOrderNotification,
 } = require("../services/emailService");
 
-
 const createOrder = async (req, res, next) => {
   mercadopago.configure({
     access_token: ACCESS_TOKEN,
@@ -17,7 +16,6 @@ const createOrder = async (req, res, next) => {
   } else {
     console.log("sin body");
   }
-
 
   //Orden de compra, obj preferencia
   const allOrders = req.body.items.map((item) => ({
@@ -68,8 +66,10 @@ const handlePending = async (req, res, next) => {
 };
 const handleSuccess = async (req, res, next) => {
   const status = req.query;
+
   console.log("Success: ", status);
   try {
+    await sendOrderNotification(req.body.clientId, req.body.orderId);
     const newPay = await Payment.create({
       clientId: req.body.clientId,
       merchant_order_id: status.merchant_order_id,
@@ -98,10 +98,7 @@ const handleSuccess = async (req, res, next) => {
       preference_id: status.preference_id,
     });
 
-
-    await sendOrderNotification(req.body.clientId, req.body.orderId);
     res.redirect(`${URL_FRONT}/cart/${newPay.payment_id}`);
-
   } catch (error) {
     console.error(error);
     next();
