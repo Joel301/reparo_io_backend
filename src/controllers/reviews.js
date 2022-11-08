@@ -43,7 +43,6 @@ const createReview = async (req, res) => {
       return res.status(400).send({
         msg: `El cliente ${id} no existe en la base de datos.`,
       });
-
     const professional = await Professional.findByPk(professionalId);
     if (!professional)
       return res.status(400).send({
