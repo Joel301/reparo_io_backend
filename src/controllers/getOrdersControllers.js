@@ -13,7 +13,10 @@ const getOrdersController = async function (req, res, next) {
         };
       });
 
-      res.json(orders);
+      //Opciones disponibles de status
+      const orderStatus = ["creada", "procesando", "cancelada", "completada"];
+
+      res.json({ orders, orderStatus });
     } else {
       res.json({ msg: "No hay ordernes" });
     }
