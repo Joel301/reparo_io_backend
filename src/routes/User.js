@@ -48,32 +48,35 @@ router.get("/", (req, res, next) => {
 });
 router.post("/login", isAuthenticated, async (req, res, next) => {
   let data = null;
-  const { email, password } = req.body;
-
-  try {
-    if (email && password) {
-      const user = await getUserByEmail(email);
-
+  const { email, password , google} = req.body;
+  let msg ="";
+try {
+  if (email) {
+    const user = await getUserByEmail(email);
       if (user.isClient) {
-        console.log("cliente");
-        if (user.isClient.password === password) {
-          console.log("password cliente correcto");
-          data = user.isClient;
+        msg=msg+"cliente";
+        if (google) {msg=msg+" google"; data = user.isClient;}
+        else{
+          if(user.isClient.password === password)
+            {msg=msg+" contraseña correcta"; data = user.isClient;}
+          else {msg=msg+" error de contraseña"}
         }
       }
       if (user.isProfessional) {
-        console.log("professional");
+        msg=msg+"professional";
+        if(google) {msg=msg+" google"; data = user.isProfessional;}
         if (user.isProfessional.password === password) {
-          console.log("password profesional correcto");
-          data = user.isProfessional;
+          msg=msg+" contraseña correcta"; data = user.isProfessional;
         }
+        else {msg=msg+" error de contraseña"}
       }
       if (user.isAdmin) {
-        console.log("administrador");
+        msg=msg+"administrador";
+        if(google){msg=msg+" google";data = user.isAdmin;}
         if (user.isProfessional.password === password) {
-          console.log("password administrador correcto");
-          data = user.isAdmin;
+          msg=msg+" contraseña correcta"; data = user.isAdmin;
         }
+        else {msg=msg+" error de contraseña"}
       }
       if (data) {
         const token = jwt.sign({ id: data.id, email: data.email }, TOKEN_KEY, {
@@ -81,11 +84,11 @@ router.post("/login", isAuthenticated, async (req, res, next) => {
         });
         console.log(data.id);
         res.cookie("userId", data.id);
-        data = { ...data, token };
+        data = { ...data, token,msg };
         // res.redirect('/home/login');
         return res.status(200).json(data);
       } else {
-        return res.status(400).json("Error de credenciales");
+        return res.status(400).json(msg);
       }
     } else {
       return res.status(401).json("Login Error");
