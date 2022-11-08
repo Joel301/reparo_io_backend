@@ -32,4 +32,4 @@ const getOrdersController = async function (req, res, next) {
   }
 };
 
-module.export = getOrdersController;
+module.exports = getOrdersController;
