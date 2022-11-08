@@ -26,6 +26,7 @@ const getReviews = async (req, res) => {
 
 const createReview = async (req, res) => {
   const { clientId, professionalId, comment, rating } = req.body;
+
   try {
   if (clientId.search(isUUID) != 0) {
     res.status(400).send({ msg: `uuid de clientId invalido: ${clientId}` });
@@ -36,7 +37,7 @@ const createReview = async (req, res) => {
       .status(400)
       .send({ msg: `uuid de professionalId invalido: ${professionalId}` });
     return;
-  }  
+  }
     const client = await Client.findByPk(clientId);
     if (!client)
       return res.status(400).send({
