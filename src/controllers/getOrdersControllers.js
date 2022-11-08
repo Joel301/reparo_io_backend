@@ -1,8 +1,13 @@
-const { Order } = require("../db");
+const { Order, OrderDetails } = require("../db");
 
 const getOrdersController = async function (req, res, next) {
   try {
-    const ordersDB = await Order.findAll();
+    const ordersDB = await Order.findAll({
+      include: {
+        model: OrderDetails,
+        attributes: ["id", "professionalId", "reservationAmount", "days"],
+      },
+    });
     if (ordersDB) {
       const orders = ordersDB.map((element) => {
         return {
@@ -10,6 +15,8 @@ const getOrdersController = async function (req, res, next) {
           amount: element.amount,
           status: element.status,
           clientId: element.clientId,
+          date: element.createdAt,
+          orderDetails: element.orderDetails,
         };
       });
 
