@@ -3,13 +3,16 @@ const { Order } = require("../db");
 const removeOrderController = async function (req, res, next) {
   let orderId = req.params.id;
   try {
-    const removedOrder = await Order.destroy({
-      where: {
-        id: orderId,
-      },
-    });
+    const cancelledOrder = await Order.update(
+      { status: "cancelada" },
+      {
+        where: {
+          id: orderId,
+        },
+      }
+    );
 
-    res.json({ message: `Borrado order id: ${orderId}`, removedOrder });
+    res.json({ message: `Cancelada order id: ${orderId}`, cancelledOrder });
   } catch (error) {
     next(error);
   }

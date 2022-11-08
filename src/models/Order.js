@@ -13,7 +13,8 @@ module.exports = (sequelize) => {
     },
     status: {
       type: DataTypes.STRING,
-      defaultValue: "Pendiente",
+      defaultValue: "creada",
+
     },
   });
 };
