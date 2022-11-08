@@ -7,12 +7,11 @@ const {
   sendOrderNotification,
 } = require("../services/emailService");
 
-
 const createOrder = async (req, res, next) => {
   mercadopago.configure({
     access_token: ACCESS_TOKEN,
   });
-  const {clientId,orderId} = req.body;
+  const { clientId, orderId } = req.body;
 
   //Orden de compra, obj preferencia
   const allOrders = req.body.items.map((item) => ({
@@ -30,24 +29,23 @@ const createOrder = async (req, res, next) => {
       success: `${URL}/home/mercado/success`, // al BACK
     },
     //notification_url: `https://c084-138-186-154-240.sa.ngrok.io/home/mercado/notificar`,
-     notification_url: `${URL}/home/mercado/notificar`,
+    notification_url: `${URL}/home/mercado/notificar`,
   };
-try{
-  const data= await mercadopago.preferences.create(preference)
-  res.status(200).send(data.body.init_point); //url de mercado pago
-  console.log(data.body.id);
+  try {
+    const data = await mercadopago.preferences.create(preference);
+    res.status(200).send(data.body.init_point); //url de mercado pago
+    console.log(data.body.id);
 
-  const newPay = await Payment.create({
-    id:data.body.id,
-    status:"pending",
-    clientId: clientId,
-    orderId: orderId,
-  });
-  }  
-  catch (e) {
-      console.log(e);
-      next();
-  };
+    const newPay = await Payment.create({
+      id: data.body.id,
+      status: "pending",
+      clientId: clientId,
+      orderId: orderId,
+    });
+  } catch (e) {
+    console.log(e);
+    next();
+  }
 };
 
 const handlePending = async (req, res, next) => {
@@ -72,27 +70,21 @@ const handleSuccess = async (req, res, next) => {
   const status = req.query;
   console.log("ESTO ES SUCCESS: ");
   try {
-      console.log("PREFERENCE_ID: ",status.preference_id);
-      const id = status.preference_id;
-      let updPay = await Payment.findOne({where:{id:id}});
-        if (updPay)
-            {
-            updPay.payment_id=status.payment_id;
-            updPay.payment_type=status.payment_type;
-            updPay.merchant_order_id=status.merchant_order_id;
-            updPay.status =status.status;
-            await updPay.save();
-            }
-          //console.log(updPay);
-          await sendOrderNotification(updPay.clientId, updPay.orderId);
-          res.json({ updPay, message: "Pay updated" });
-          res.redirect(URL_FRONT);
-        }
-    
-    
-    
-
-   catch (error) {
+    console.log("PREFERENCE_ID: ", status.preference_id);
+    const id = status.preference_id;
+    let updPay = await Payment.findOne({ where: { id: id } });
+    if (updPay) {
+      updPay.payment_id = status.payment_id;
+      updPay.payment_type = status.payment_type;
+      updPay.merchant_order_id = status.merchant_order_id;
+      updPay.status = status.status;
+      await updPay.save();
+    }
+    //console.log(updPay);
+    await sendOrderNotification(updPay.clientId, updPay.orderId);
+    res.json({ updPay, message: "Pay updated" });
+    res.redirect(`${URL_FRONT}/home`);
+  } catch (error) {
     console.error(error);
     next();
   }
