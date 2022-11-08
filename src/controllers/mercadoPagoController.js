@@ -33,15 +33,15 @@ const createOrder = async (req, res, next) => {
   };
   try {
     const data = await mercadopago.preferences.create(preference);
-    res.status(200).send(data.body.init_point); //url de mercado pago
-    console.log(data.body.id);
 
     const newPay = await Payment.create({
       id: data.body.id,
       status: "pending",
-      clientId: clientId,
-      orderId: orderId,
+      clientId,
+      orderId,
     });
+
+    res.status(200).send(data.body.init_point); //url de mercado pago
   } catch (e) {
     console.log(e);
     next();
@@ -83,8 +83,10 @@ const handleSuccess = async (req, res, next) => {
     //console.log(updPay);
     const order = await updPay.getOrder();
     const client = await updPay.getClient();
+
     //Cambia el status a procesada luego de realizar el pago
     await order.update({ status: "completa" });
+
 
     await sendOrderNotification(client.id, order.id);
 
