@@ -33,17 +33,15 @@ const createOrder = async (req, res, next) => {
   };
   try {
     const data = await mercadopago.preferences.create(preference);
-    res.status(200).send(data.body.init_point); //url de mercado pago
-    console.log(data.body.id);
 
     const newPay = await Payment.create({
       id: data.body.id,
       status: "pending",
+      clientId,
+      orderId,
     });
-    const client = await Client.findOne({ where: { id: clientId } });
-    const order = await Order.findOne({ where: { id: orderId } });
-    await Payment.setOrder(order);
-    await Payment.setClient(client);
+
+    res.status(200).send(data.body.init_point); //url de mercado pago
   } catch (e) {
     console.log(e);
     next();
@@ -83,8 +81,10 @@ const handleSuccess = async (req, res, next) => {
       await updPay.save();
     }
     //console.log(updPay);
-    await sendOrderNotification(updPay.clientId, updPay.orderId);
-    res.json({ updPay, message: "Pay updated" });
+    const order = await updPay.getOrder();
+    const client = await updPay.getClient();
+    await sendOrderNotification(client.id, order.id);
+
     res.redirect(`${URL_FRONT}/home`);
   } catch (error) {
     console.error(error);
