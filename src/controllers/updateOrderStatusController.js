@@ -8,5 +8,12 @@ const updateOrderStatus = async function (req, res, next) {
     const order = await Order.findOne({ where: { id: orderId } });
 
     await order.update({ status: status });
-  } catch (error) {}
+    await order.reload();
+
+    res.json({ msg: "status cambiado", newStatus: order.status });
+  } catch (error) {
+    next(error);
+  }
 };
+
+module.export = updateOrderStatus;
