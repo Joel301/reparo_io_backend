@@ -27,6 +27,7 @@ const getReviews = async (req, res) => {
 const createReview = async (req, res) => {
   const { clientId, professionalId, comment, rating } = req.body;
 
+  try {
   if (clientId.search(isUUID) != 0) {
     res.status(400).send({ msg: `uuid de clientId invalido: ${clientId}` });
     return;
@@ -37,8 +38,6 @@ const createReview = async (req, res) => {
       .send({ msg: `uuid de professionalId invalido: ${professionalId}` });
     return;
   }
-
-  try {
     const client = await Client.findByPk(clientId);
     if (!client)
       return res.status(400).send({
@@ -91,6 +90,7 @@ const createReview = async (req, res) => {
 const updateReview = async (req, res) => {
   const { clientId, professionalId, comment, rating } = req.body;
 
+  try {
   if (clientId.search(isUUID) != 0) {
     res.status(400).send({ msg: `uuid de clientId invalido: ${clientId}` });
     return;
@@ -107,7 +107,6 @@ const updateReview = async (req, res) => {
       msg: `El professional ${professional.id} no existe en la base de datos.`,
 
     });
-  try {
     const review = await Review.findOne({
       where: {
         clientId: clientId,
