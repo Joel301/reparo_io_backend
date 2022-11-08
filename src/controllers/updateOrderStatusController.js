@@ -16,4 +16,4 @@ const updateOrderStatus = async function (req, res, next) {
   }
 };
 
-module.export = updateOrderStatus;
+module.exports = updateOrderStatus;
