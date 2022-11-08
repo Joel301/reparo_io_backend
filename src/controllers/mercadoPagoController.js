@@ -83,6 +83,11 @@ const handleSuccess = async (req, res, next) => {
     //console.log(updPay);
     const order = await updPay.getOrder();
     const client = await updPay.getClient();
+
+    //Cambia el status a procesada luego de realizar el pago
+    await order.update({ status: "completa" });
+
+
     await sendOrderNotification(client.id, order.id);
 
     res.redirect(`${URL_FRONT}/home`);
