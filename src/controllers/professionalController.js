@@ -36,7 +36,7 @@ const getAllProfesional = async (req, res, next) => {
 const getProfessioanlById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    if (!isUUID.test(id)) throw new Error("Invalid UUID Format"); //revisa que sea un uuid para evitar sequelize error
+    if (!isUUID.test(id)) return { error: `uuid de usuario invalido: ${id}` }; //revisa que sea un uuid para evitar sequelize error
     const profesionalId = await Professional.findOne({
       where: { id: id },
       include: [{ model: Profession, attributes: ["id", "name"] }],

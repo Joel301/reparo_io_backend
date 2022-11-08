@@ -1,10 +1,10 @@
-const { Order, OrderDetails } = require("../db");
+const { Order, OrderDetail } = require("../db");
 
 const getOrdersController = async function (req, res, next) {
   try {
     const ordersDB = await Order.findAll({
       include: {
-        model: OrderDetails,
+        model: OrderDetail,
         attributes: ["professionalId", "reservationAmount", "days"],
       },
     });
