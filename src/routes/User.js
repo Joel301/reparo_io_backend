@@ -68,7 +68,7 @@ try {
         }
       }
       if (user.isProfessional) {
-        msg=msg+"professional";
+        msg=msg+"profesional";
         if(google) {msg=msg+" google"; data = user.isProfessional;}
         if (user.isProfessional.password === password) {
           msg=msg+" contraseña correcta"; data = user.isProfessional;
