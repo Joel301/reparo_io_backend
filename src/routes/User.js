@@ -33,21 +33,26 @@ router.get("/", (req, res, next) => {
   let email;
   req.query.id ? (id = req.query.id) : null; //si viene id
   req.query.email ? (email = req.query.email) : null; //si viene email
-
-  if (id) {
-    getUserById(id).then((user) => {
-      res.send(user);
-    });
-  } else if (email) {
-    getUserByEmail(email).then((user) => {
-      res.send(user);
-    });
-  } else {
-    res.send("la pifiaste con la consulta");
+  try {
+    if (id) {
+      getUserById(id).then((user) => {
+        res.send(user);
+      });
+    } else if (email) {
+      getUserByEmail(email).then((user) => {
+        res.send(user);
+      });
+    } else {
+      res.send("la pifiaste con la consulta");
+    }
+  } catch (error) {
+    next(error);
   }
 });
 router.post("/login", isAuthenticated, async (req, res, next) => {
-  let data = null;
+
+let data = null;
+
   const { email, password , google} = req.body;console.log(req.body);
   let msg ="";
 try {
@@ -93,7 +98,7 @@ try {
     } else {
       return res.status(401).json("Login Error");
     }
-  } catch (error) {
+} catch (error) {
     next(error);
   }
 });
