@@ -5,7 +5,7 @@ const getOrdersController = async function (req, res, next) {
     const ordersDB = await Order.findAll({
       include: {
         model: OrderDetails,
-        attributes: ["id", "professionalId", "reservationAmount", "days"],
+        attributes: ["professionalId", "reservationAmount", "days"],
       },
     });
     if (ordersDB) {
