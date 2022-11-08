@@ -11,5 +11,9 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
       defaultValue: 0.0,
     },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: "pendiente",
+    },
   });
 };
