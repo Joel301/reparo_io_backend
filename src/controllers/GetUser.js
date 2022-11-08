@@ -4,11 +4,11 @@ let isUUID =
   /[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}/gi;
 async function getUserById(id) {
   console.log(id);
-  if (id.search(isUUID) != 0) {
-    res.status(400).send({ msg: `uuid de usuario invalido: ${id}` });
-    return;
-  }
+
   try {
+    if (id.search(isUUID) != 0) {
+      throw new Error(`uuid de usuario invalido: ${id}`);
+    }
     const isClient = await Client.findByPk(id);
     if (isClient) {
       isClient.cart = await isClient.getCart();
