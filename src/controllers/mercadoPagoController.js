@@ -39,9 +39,11 @@ const createOrder = async (req, res, next) => {
     const newPay = await Payment.create({
       id: data.body.id,
       status: "pending",
-      clientId: clientId,
-      orderId: orderId,
     });
+    const client = await Client.findOne({ where: { id: clientId } });
+    const order = await Order.findOne({ where: { id: orderId } });
+    await Payment.setOrder(order);
+    await Payment.setClient(client);
   } catch (e) {
     console.log(e);
     next();
