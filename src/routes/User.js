@@ -50,7 +50,9 @@ router.get("/", (req, res, next) => {
   }
 });
 router.post("/login", isAuthenticated, async (req, res, next) => {
+
 let data = null;
+
   const { email, password , google} = req.body;console.log(req.body);
   let msg ="";
 try {
