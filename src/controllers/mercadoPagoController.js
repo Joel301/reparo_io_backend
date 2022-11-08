@@ -1,22 +1,17 @@
 const mercadopago = require("mercadopago");
 require("dotenv").config();
 const { ACCESS_TOKEN, URL, URL_FRONT } = process.env;
-const { Payment } = require("../db");
+const { Payment, Client, Order } = require("../db");
 const {
   sendServiceNotification,
   sendOrderNotification,
 } = require("../services/emailService");
 
 const createOrder = async (req, res, next) => {
-  const { clientId, orderId } = req.body;
   mercadopago.configure({
     access_token: ACCESS_TOKEN,
   });
-  if (req.body) {
-    console.log(req.body);
-  } else {
-    console.log("sin body");
-  }
+  const { clientId, orderId } = req.body;
 
   //Orden de compra, obj preferencia
   const allOrders = req.body.items.map((item) => ({
@@ -33,18 +28,24 @@ const createOrder = async (req, res, next) => {
       pending: `${URL}/home/mercado/pending`, // al BACK
       success: `${URL}/home/mercado/success`, // al BACK
     },
+    //notification_url: `https://c084-138-186-154-240.sa.ngrok.io/home/mercado/notificar`,
     notification_url: `${URL}/home/mercado/notificar`,
   };
+  try {
+    const data = await mercadopago.preferences.create(preference);
+    res.status(200).send(data.body.init_point); //url de mercado pago
+    console.log(data.body.id);
 
-  mercadopago.preferences
-    .create(preference)
-    .then(function (data) {
-      res.status(200).send(data.body.init_point); //url de mercado pago
-    })
-    .catch(function (e) {
-      console.log(e);
-      next();
+    const newPay = await Payment.create({
+      id: data.body.id,
+      status: "pending",
+      clientId: clientId,
+      orderId: orderId,
     });
+  } catch (e) {
+    console.log(e);
+    next();
+  }
 };
 
 const handlePending = async (req, res, next) => {
@@ -67,41 +68,22 @@ const handlePending = async (req, res, next) => {
 };
 const handleSuccess = async (req, res, next) => {
   const status = req.query;
-  const { clientId, orderId } = status.external_reference;
-  console.log("Success: ", status);
+  console.log("ESTO ES SUCCESS: ");
   try {
-    console.log("clientId: ", clientId);
-    console.log("orderId: ", orderId);
-    await sendOrderNotification(clientId, orderId);
-    const newPay = await Payment.create({
-      clientId,
-      merchant_order_id: status.merchant_order_id,
-      status: status.status,
-      // Estado del pago
-      // pending: The user has not yet completed the payment process.
-      // approved: The payment has been approved and accredited.
-      // authorized: The payment has been authorized but not captured yet.
-      // in_process: Payment is being reviewed.
-      // in_mediation: Users have initiated a dispute.
-      // rejected: Payment was rejected. The user may retry payment.
-      // cancelled: Payment was cancelled by one of the parties or because time for payment has expired
-      // refunded: Payment was refunded to the user.
-      // charged_back: A chargeback was made in the buyer’s credit card.
-      // payment_method_id: status.payment_method_id,
-      payment_id: status.payment_id,
-      payment_type: status.payment_type,
-      //Tipo de medio de pago
-      //account_money: Money in the Mercado Pago account.
-      //ticket: Printed ticket
-      //bank_transfer: Wire transfer.
-      //atm: Payment by ATM
-      //credit_card: Payment by credit card
-      //debit_card: Payment by debit card
-      //prepaid_card: Payment by prepaid card
-      preference_id: status.preference_id,
-    });
-
-    res.redirect(`${URL_FRONT}/cart/${newPay.payment_id}`);
+    console.log("PREFERENCE_ID: ", status.preference_id);
+    const id = status.preference_id;
+    let updPay = await Payment.findOne({ where: { id: id } });
+    if (updPay) {
+      updPay.payment_id = status.payment_id;
+      updPay.payment_type = status.payment_type;
+      updPay.merchant_order_id = status.merchant_order_id;
+      updPay.status = status.status;
+      await updPay.save();
+    }
+    //console.log(updPay);
+    await sendOrderNotification(updPay.clientId, updPay.orderId);
+    res.json({ updPay, message: "Pay updated" });
+    res.redirect(`${URL_FRONT}/home`);
   } catch (error) {
     console.error(error);
     next();
