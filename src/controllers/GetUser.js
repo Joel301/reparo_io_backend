@@ -7,7 +7,7 @@ async function getUserById(id) {
 
   try {
     if (id.search(isUUID) != 0) {
-      throw new Error(`uuid de usuario invalido: ${id}`);
+      return { error: `uuid de usuario invalido: ${id}` };
     }
     const isClient = await Client.findByPk(id);
     if (isClient) {
