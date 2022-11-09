@@ -78,7 +78,7 @@ try {
       if (user.isAdmin) {
         msg=msg+"administrador";
         if(google){msg=msg+" google";data = user.isAdmin;}
-        if (user.isProfessional.password === password) {
+        if (user.isAdmin.password === password) {
           msg=msg+" contraseña correcta"; data = user.isAdmin;
         }
         else {msg=msg+" error de contraseña"}
