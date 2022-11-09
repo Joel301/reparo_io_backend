@@ -54,9 +54,10 @@ router.post("/login", isAuthenticated, async (req, res, next) => {
 let data = null;
 
   const { email, password , google} = req.body;console.log(req.body);
-  let msg ="";
+  let msg ="correo no existe en DB";
 try {
   if (email) {
+    msg="";
     const user = await getUserByEmail(email);
       if (user.isClient) {
         msg=msg+"cliente";
