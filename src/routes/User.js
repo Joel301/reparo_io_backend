@@ -54,10 +54,9 @@ router.post("/login", isAuthenticated, async (req, res, next) => {
 let data = null;
 
   const { email, password , google} = req.body;console.log(req.body);
-  let msg ="correo no existe en DB";
+  let msg ="";
 try {
   if (email) {
-    msg="";
     const user = await getUserByEmail(email);
       if (user.isClient) {
         msg=msg+"cliente";
@@ -93,7 +92,7 @@ try {
         data = { ...data, token,msg };
         // res.redirect('/home/login');
         return res.status(200).json(data);
-      } else {
+      } else {msg="No existe en DB";
         return res.status(400).json(msg);
       }
     } else {
