@@ -65,11 +65,10 @@ const getProfessioanlById = async (req, res, next) => {
         phoneNumber: profesionalId.phoneNumber,
         address: profesionalId.address,
         email: profesionalId.email,
-        rating: profesionalId.rating,
-        reputation: profesionalId.reputation
-          ? profesionalId.reputation
+        rating: profesionalId.rating
+          ? profesionalId.rating
           : "not available yet",
-          availableDays: profesionalId.availableDays,
+        availableDays: profesionalId.availableDays,
         //  stock,
         professions: profes,
       };
@@ -174,7 +173,7 @@ const delProfesional = async (req, res, next) => {
     });
     if (profDelete) {
       //profDelete.destroy({where:{include:{model: Review}}});
-      profDelete.update({...profDelete, enabled:false});
+      profDelete.update({ ...profDelete, enabled: false });
       res.json({ profDelete, message: "..Professional deleted!" });
     } else res.send({ message: "professional not found" });
   } catch (error) {
