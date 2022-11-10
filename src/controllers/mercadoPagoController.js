@@ -87,6 +87,16 @@ const handleSuccess = async (req, res, next) => {
     //Cambia el status a procesada luego de realizar el pago
     await order.update({ status: "completa" });
 
+    const cart = await client.getCart();
+    const cartDetails = await cart.getCartDetails();
+
+    const professionals = cartDetails.push(async (element) => {
+      return await element.getProfessional();
+    });
+
+    await cartDetails.destroy();
+
+    console.log(professionals);
 
     await sendOrderNotification(client.id, order.id);
 
