@@ -1,4 +1,11 @@
-const { Professional, Profession, Review } = require("../db.js");
+const {
+  Professional,
+  Profession,
+  Review,
+  Order,
+  OrderDetail,
+  Payment,
+} = require("../db.js");
 const { Op } = require("sequelize");
 const postProfessionalService = require("../services/postProfessionalService.js");
 const getAllProfessionalService = require("../services/getAllProfessionalService.js");
@@ -39,7 +46,17 @@ const getProfessioanlById = async (req, res, next) => {
     if (!isUUID.test(id)) return { error: `uuid de usuario invalido: ${id}` }; //revisa que sea un uuid para evitar sequelize error
     const profesionalId = await Professional.findOne({
       where: { id: id },
-      include: [{ model: Profession, attributes: ["id", "name"] }],
+      include: [
+        { model: Profession, attributes: ["id", "name"] },
+        {
+          model: OrderDetail,
+          include: {
+            model: Order,
+            attributes: ["id", "clientId"],
+            include: { model: Payment, attributes: ["id"] },
+          },
+        },
+      ],
     });
 
     if (!profesionalId) res.json("not Found");
@@ -56,7 +73,15 @@ const getProfessioanlById = async (req, res, next) => {
       //   if (element.days.includes(day)) return false;
       //  });
       // });
-
+      const orders = profesionalId.orderDetails.map((element) => {
+        return {
+          orderId: element.orders.id,
+          clientId: element.orders.clientId,
+          paymentId: element.orders.payments.id,
+          days: element.days,
+          amount: element.reservationAmout,
+        };
+      });
       const prof = {
         id: profesionalId.id,
         firstName: profesionalId.firstName,
@@ -71,6 +96,7 @@ const getProfessioanlById = async (req, res, next) => {
         availableDays: profesionalId.availableDays,
         //  stock,
         professions: profes,
+        orders: orders,
       };
       res.json(prof);
     }
