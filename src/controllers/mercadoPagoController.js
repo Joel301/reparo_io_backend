@@ -1,7 +1,14 @@
 const mercadopago = require("mercadopago");
 require("dotenv").config();
 const { ACCESS_TOKEN, URL, URL_FRONT } = process.env;
-const { Payment, Client, Order } = require("../db");
+const {
+  Payment,
+  Client,
+  Order,
+  OrderDetail,
+  Cart,
+  CartDetail,
+} = require("../db");
 const {
   sendServiceNotification,
   sendOrderNotification,
@@ -87,18 +94,11 @@ const handleSuccess = async (req, res, next) => {
     //Cambia el status a procesada luego de realizar el pago
     await order.update({ status: "completa" });
 
-    const cart = await client.getCart();
-    const cartDetails = await cart.getCartDetails();
-
-    const professionals = cartDetails.push(async (element) => {
-      return await element.getProfessional();
+    const cart = await Cart.findAll({
+      where: { id: client.id },
     });
 
-    cartDetails.map(async (element) => {
-      await element.destroy();
-    });
-
-    console.log(professionals);
+    await CartDetail.destroy({ where: { cartId: cart.id } });
 
     await sendOrderNotification(client.id, order.id);
 
