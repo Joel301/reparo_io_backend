@@ -75,9 +75,8 @@ const handlePending = async (req, res, next) => {
 };
 const handleSuccess = async (req, res, next) => {
   const status = req.query;
-  console.log("ESTO ES SUCCESS: ");
+
   try {
-    console.log("PREFERENCE_ID: ", status.preference_id);
     const id = status.preference_id;
     let updPay = await Payment.findOne({ where: { id: id } });
     if (updPay) {
@@ -94,7 +93,7 @@ const handleSuccess = async (req, res, next) => {
     //Cambia el status a procesada luego de realizar el pago
     await order.update({ status: "completa" });
 
-    const cart = await Cart.findAll({
+    const cart = await Cart.findOne({
       where: { clientId: client.id },
     });
 
@@ -108,7 +107,7 @@ const handleSuccess = async (req, res, next) => {
     res.redirect(`${URL_FRONT}/home`);
   } catch (error) {
     console.error(error);
-    next();
+    next(error);
   }
 };
 
