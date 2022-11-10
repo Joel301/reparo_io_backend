@@ -73,7 +73,7 @@ const getProfessioanlById = async (req, res, next) => {
       //   if (element.days.includes(day)) return false;
       //  });
       // });
-      console.log(profesionalId.orderDetails);
+
       const orders = profesionalId.orderDetails.map((element) => {
         return {
           orderId: element.order.id,
