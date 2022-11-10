@@ -98,6 +98,9 @@ const handleSuccess = async (req, res, next) => {
       where: { clientId: client.id },
     });
 
+    console.log("CART: ", cart);
+    console.log("CLIENT: ", client);
+
     await CartDetail.destroy({ where: { cartId: cart.id } });
 
     await sendOrderNotification(client.id, order.id);
