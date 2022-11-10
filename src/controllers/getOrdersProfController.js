@@ -8,7 +8,7 @@ const getOrdersProfController = async function (req, res, next) {
       where: { professionalId: id },
       include: {
         model: Order,
-        attributes: ["id", "clientId"],
+        attributes: ["id", "clientId", "status"],
         include: { model: Payment, attributes: ["id"] },
       },
     });
