@@ -94,7 +94,9 @@ const handleSuccess = async (req, res, next) => {
       return await element.getProfessional();
     });
 
-    await cartDetails.destroy();
+    cartDetails.map(async (element) => {
+      await element.destroy();
+    });
 
     console.log(professionals);
 
