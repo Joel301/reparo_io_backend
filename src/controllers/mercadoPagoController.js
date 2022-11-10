@@ -95,7 +95,7 @@ const handleSuccess = async (req, res, next) => {
     await order.update({ status: "completa" });
 
     const cart = await Cart.findAll({
-      where: { id: client.id },
+      where: { clientId: client.id },
     });
 
     await CartDetail.destroy({ where: { cartId: cart.id } });
