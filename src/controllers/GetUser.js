@@ -6,9 +6,9 @@ async function getUserById(id) {
   console.log(id);
 
   try {
-    if (id.search(isUUID) != 0) {
-      return { error: `uuid de usuario invalido: ${id}` };
-    }
+    //if (id.search(isUUID) != 0) {
+      //return { error: `uuid de usuario invalido: ${id}` };
+    //}
     const isClient = await Client.findByPk(id);
     if (isClient) {
       isClient.cart = await isClient.getCart();
