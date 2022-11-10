@@ -9,7 +9,6 @@ const {
 const { Op } = require("sequelize");
 const postProfessionalService = require("../services/postProfessionalService.js");
 const getAllProfessionalService = require("../services/getAllProfessionalService.js");
-const Order = require("../models/Order.js");
 
 const isUUID =
   /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
