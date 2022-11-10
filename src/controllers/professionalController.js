@@ -75,9 +75,11 @@ const getProfessioanlById = async (req, res, next) => {
       // });
       const orders = profesionalId.orderDetails.map((element) => {
         return {
-          orderId: element.orders.id,
-          clientId: element.orders.clientId,
-          paymentId: element.orders.payments.id,
+          orderId: element.order.id,
+          clientId: element.order.clientId,
+          paymentId: element.order.payment
+            ? element.order.payment.id
+            : "sin pago asociado",
           days: element.days,
           amount: element.reservationAmout,
         };
