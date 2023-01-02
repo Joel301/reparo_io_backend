@@ -19,7 +19,7 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-const server = require("./src/app.js");
+// const server = require("./src/app.js");
 
 const port = process.env.PORT || 3001;
 
@@ -27,8 +27,8 @@ const { conn } = require("./src/db.js");
 const { preloadProfs } = require("./src/utils/preLoadProfs.js");
 
 //cambiar mode para modificar modelos
-mode = { alter: true };
-//mode = { force: true }
+mode = {};
+// mode = { force: true }
 
 // mode = { alter: true };
 
@@ -37,9 +37,9 @@ conn
   .sync(mode)
   .then(() => {
     preloadProfs();
-  })
-  .then(() => {
-    server.listen(port, () => {
-      console.log("listening at %s", port); // eslint-disable-line no-console
-    });
-  });
+  }).then(() => console.log('done'))
+  // .then(() => {
+  //   server.listen(port, () => {
+  //     console.log("listening at %s", port); // eslint-disable-line no-console
+  //   });
+  // });
